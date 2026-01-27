@@ -54,18 +54,18 @@
 ## 🔵 Phase 3: Frontend Core (Frontend Focus)
 **Agent:** `frontend-specialist`
 
-- [ ] **Task 3.1: Map Foundation**
+- [x] **Task 3.1: Map Foundation**
   - **Input:** `frontend/src/app`
   - **Action:** Install `react-leaflet` and Leaflet CSS. Create `MapComponent`.
   - **Design:** Mobile-full-height view.
   - **Verify:** Map renders tiles (OpenStreetMap) on localhost:3000.
 
-- [ ] **Task 3.2: Fetch & Display**
+- [x] **Task 3.2: Fetch & Display**
   - **Action:** Fetch data from Laravel API (`http://localhost:8000/api/bars`).
   - **Action:** Render Clusters/Pins on Map.
   - **Verify:** Pins appear in correct coordinates.
 
-- [ ] **Task 3.3: Bar Details & Routing**
+- [x] **Task 3.3: Bar Details & Routing**
   - **Action:** Create "Bottom Sheet" or Modal for Bar details when clicking a pin.
   - **Verify:** Clicking pin shows Name/Address/Rating.
 

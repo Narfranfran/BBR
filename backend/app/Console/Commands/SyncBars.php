@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Console\Commands;
 
 use App\Models\Bar;
@@ -33,24 +34,25 @@ class SyncBars extends Command
 
         // Filter for "Bares" or similar establishments
         $queryParams = [
-            'where'  => 'establecimiento LIKE "Bar%" OR establecimiento LIKE "Cafeter%"',
-            'limit'  => 100,
+            'where' => 'establecimiento LIKE "Bar%" OR establecimiento LIKE "Cafeter%"',
+            'limit' => 100,
             'offset' => 0,
         ];
 
         $totalProcessed = 0;
-        $hasMore        = true;
+        $hasMore = true;
 
         while ($hasMore) {
             $response = Http::get($baseUrl, $queryParams);
 
             if ($response->failed()) {
-                $this->error('Error conectando con la API: ' . $response->status());
+                $this->error('Error conectando con la API: '.$response->status());
+
                 return;
             }
 
-            $data       = $response->json();
-            $records    = $data['results'] ?? [];
+            $data = $response->json();
+            $records = $data['results'] ?? [];
             $totalCount = $data['total_count'] ?? 0;
 
             if (empty($records)) {
@@ -64,29 +66,29 @@ class SyncBars extends Command
                     continue;
                 }
 
-                $name         = $record['nombre'] ?? 'Sin nombre';
-                $address      = $record['direccion'] ?? null;
+                $name = $record['nombre'] ?? 'Sin nombre';
+                $address = $record['direccion'] ?? null;
                 $municipality = $record['municipio'] ?? null;
-                $province     = $record['provincia'] ?? null;
-                $type         = $record['establecimiento'] ?? 'Bar';
-                $seats        = isset($record['plazas']) ? (int) $record['plazas'] : null;
+                $province = $record['provincia'] ?? null;
+                $type = $record['establecimiento'] ?? 'Bar';
+                $seats = isset($record['plazas']) ? (int) $record['plazas'] : null;
 
-                                                        // Geo
+                // Geo
                 $geo = $record['geo_point_2d'] ?? null; // usually {lon: x, lat: y}
                 $lat = $geo['lat'] ?? null;
                 $lon = $geo['lon'] ?? null;
 
                 $barData = [
                     'registry_number' => $signatura,
-                    'name'            => $name,
-                    'address'         => $address,
-                    'municipality'    => $municipality,
-                    'province'        => $province,
-                    'type'            => $type,
-                    'latitude'        => $lat,
-                    'longitude'       => $lon,
-                    'seats'           => $seats,
-                    'api_updated_at'  => now(),
+                    'name' => $name,
+                    'address' => $address,
+                    'municipality' => $municipality,
+                    'province' => $province,
+                    'type' => $type,
+                    'latitude' => $lat,
+                    'longitude' => $lon,
+                    'seats' => $seats,
+                    'api_updated_at' => now(),
                 ];
 
                 $bar = Bar::updateOrCreate(

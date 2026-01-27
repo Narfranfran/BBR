@@ -1,14 +1,9 @@
-"use client";
+import MapContainer from '@/components/Map/MapContainer';
 
-import { fetchHealth } from "@/services/api";
-
-export default async function Home() {
-  const health = await fetchHealth();
-
+export default function Home() {
   return (
-    <main className="p-10">
-      <h1 className="text-3xl font-bold">BBr – BuscaBares</h1>
-      <pre>{JSON.stringify(health, null, 2)}</pre>
+    <main className="h-screen w-screen overflow-hidden">
+      <MapContainer />
     </main>
   );
 }

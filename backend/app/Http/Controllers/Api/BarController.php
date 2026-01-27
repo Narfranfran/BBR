@@ -44,8 +44,10 @@ class BarController extends Controller
                 "ST_Distance_Sphere(location, ST_GeomFromText('POINT(? ?)', 4326)) ASC",
                 [$lon, $lat]
             );
+        } elseif ($request->input('sort') === 'rating') {
+            $query->withAvg('reviews', 'rating')
+                ->orderByDesc('reviews_avg_rating');
         } else {
-            // Default ordering
             $query->orderBy('name');
         }
 
@@ -58,6 +60,7 @@ class BarController extends Controller
     public function show($id)
     {
         $bar = Bar::findOrFail($id);
+
         return new BarResource($bar);
     }
 }

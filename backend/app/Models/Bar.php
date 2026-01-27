@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,9 +28,9 @@ class Bar extends Model
     ];
 
     protected $casts = [
-        'latitude'       => 'float',
-        'longitude'      => 'float',
-        'seats'          => 'integer',
+        'latitude' => 'float',
+        'longitude' => 'float',
+        'seats' => 'integer',
         'api_updated_at' => 'datetime',
     ];
 

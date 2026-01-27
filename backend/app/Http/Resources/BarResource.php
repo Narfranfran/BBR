@@ -22,6 +22,7 @@ class BarResource extends JsonResource
                 'municipality' => $this->municipality,
                 'province'     => $this->province,
                 'type'         => $this->type,
+                'rating'       => $this->whenNotNull($this->reviews_avg_rating),
                 'coordinates'  => [
                     'lat' => $this->latitude,
                     'lon' => $this->longitude,
