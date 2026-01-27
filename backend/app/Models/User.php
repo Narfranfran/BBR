@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -42,7 +41,17 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
+    }
+
+    public function favorites()
+    {
+        return $this->belongsToMany(Bar::class, 'favorites');
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
     }
 }
