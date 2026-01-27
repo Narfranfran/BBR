@@ -1,3 +1,5 @@
+"use client";
+
 import { fetchHealth } from "@/services/api";
 
 export default async function Home() {
