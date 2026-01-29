@@ -25,8 +25,21 @@ export interface Bar {
   };
 }
 
-export function useBars(params?: string) {
-  const queryString = params ? `?${params}` : "";
+export interface BarsFilters {
+  province?: string;
+  type?: string;
+  search?: string;
+}
+
+export function useBars(filters?: BarsFilters) {
+  // Construct query string from filters
+  const params = new URLSearchParams();
+  if (filters?.province) params.append('province', filters.province);
+  if (filters?.type) params.append('type', filters.type);
+  if (filters?.search) params.append('search', filters.search);
+
+  const queryString = params.toString() ? `?${params.toString()}` : "";
+  
   // Default to fetching all/paginated, or utilize bounding box if provided
   const { data, error, isLoading } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/bars${queryString}`,

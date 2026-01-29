@@ -9,13 +9,21 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
     "@types/leaflet": "^1.9.21",
+    "chart.js": "^4.5.1",
+    "clsx": "^2.1.1",
     "leaflet": "^1.9.4",
+    "lucide-react": "^0.563.0",
     "next": "16.1.4",
     "react": "19.2.3",
+    "react-chartjs-2": "^5.3.1",
     "react-dom": "19.2.3",
+    "react-hook-form": "^7.71.1",
     "react-leaflet": "^5.0.0",
-    "swr": "^2.3.8"
+    "swr": "^2.3.8",
+    "tailwind-merge": "^3.4.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

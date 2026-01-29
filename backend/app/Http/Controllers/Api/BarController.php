@@ -25,6 +25,17 @@ class BarController extends Controller
             $query->where('municipality', $municipality);
         }
 
+        // Filter by Province
+        if ($province = $request->input('province')) {
+            // Flexible match or exact match. Using like for flexibility with dirty data
+            $query->where('province', 'like', "%{$province}%");
+        }
+
+        // Filter by Type
+        if ($type = $request->input('type')) {
+            $query->where('type', 'like', "%{$type}%");
+        }
+
         // Geospatial Search (Bars near a point)
         // usage: ?lat=40.9&lon=-5.6&radius_km=10
         if ($request->has(['lat', 'lon'])) {
