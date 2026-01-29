@@ -34,20 +34,19 @@ class SyncBars extends Command
 
         // Filter for "Bares" or similar establishments
         $queryParams = [
-            'where' => 'establecimiento LIKE "Bar%" OR establecimiento LIKE "Cafeter%"',
-            'limit' => 100,
-            'offset' => 0,
+             'where' => 'tipo LIKE "Bar%" OR tipo LIKE "Cafeter%" OR tipo LIKE "Restaurante%"',
+             'limit' => 100,
+             'offset' => 0,
         ];
 
         $totalProcessed = 0;
         $hasMore = true;
 
         while ($hasMore) {
-            $response = Http::get($baseUrl, $queryParams);
+            $response = Http::withOptions(['verify' => false])->get($baseUrl, $queryParams);
 
             if ($response->failed()) {
                 $this->error('Error conectando con la API: '.$response->status());
-
                 return;
             }
 
@@ -55,28 +54,34 @@ class SyncBars extends Command
             $records = $data['results'] ?? [];
             $totalCount = $data['total_count'] ?? 0;
 
+            $this->info("API Response: Found " . count($records) . " records this batch. Total API count: " . $totalCount);
+
             if (empty($records)) {
                 $hasMore = false;
                 break;
             }
 
             foreach ($records as $record) {
-                $signatura = $record['signatura'] ?? null;
+                // Mapping keys based on debug output
+                $signatura = $record['n_registro'] ?? null;
                 if (! $signatura) {
                     continue;
                 }
 
-                $name = $record['nombre'] ?? 'Sin nombre';
-                $address = $record['direccion'] ?? null;
-                $municipality = $record['municipio'] ?? null;
+                $name = $record['establecimiento'] ?? 'Sin nombre';
+                $address = $record['direccion'] ?? ($record['municipio'] ?? null); // Fallback
+                $municipality = $record['municipio'] ?? null; // usually exists
                 $province = $record['provincia'] ?? null;
-                $type = $record['establecimiento'] ?? 'Bar';
+                $type = $record['tipo'] ?? 'Bar';
                 $seats = isset($record['plazas']) ? (int) $record['plazas'] : null;
 
-                // Geo
-                $geo = $record['geo_point_2d'] ?? null; // usually {lon: x, lat: y}
-                $lat = $geo['lat'] ?? null;
-                $lon = $geo['lon'] ?? null;
+                // Geo - Key is 'posicion' in this dataset
+                $geo = $record['posicion'] ?? [];
+                // Force cast to array
+                $geo = (array) $geo;
+
+                $lat = $geo['lat'] ?? $record['gps_latitud'] ?? null;
+                $lon = $geo['lon'] ?? $record['gps_longitud'] ?? null;
 
                 $barData = [
                     'registry_number' => $signatura,
