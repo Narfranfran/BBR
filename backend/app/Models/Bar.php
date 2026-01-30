@@ -18,7 +18,7 @@ class Bar extends Model
         'type',
         'latitude',
         'longitude',
-        // 'location' handled by spatial logic usually
+        'location', // Added for mass assignment
         'phone',
         'email',
         'web',

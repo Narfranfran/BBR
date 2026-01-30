@@ -8,4 +8,6 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command('app:sync-bars')->daily();
+Schedule::command('app:download-bars-dataset')->dailyAt('03:00')->onSuccess(function () {
+    Artisan::call('app:sync-bars');
+});

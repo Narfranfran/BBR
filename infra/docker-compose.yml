@@ -42,5 +42,25 @@ services:
     depends_on:
       - backend
 
+  scheduler:
+    build:
+      context: ../backend
+      dockerfile: ../infra/docker/backend/Dockerfile
+    container_name: bbr-scheduler
+    restart: always
+    volumes:
+      - ../backend:/var/www
+    depends_on:
+      - backend
+    command: >
+      sh -c "
+        # Wait for the backend to run migrations
+        sleep 30 &&
+        while [ true ]; do
+          php /var/www/artisan schedule:run >> /dev/null 2>&1;
+          sleep 60;
+        done
+      "
+
 volumes:
   db_data:

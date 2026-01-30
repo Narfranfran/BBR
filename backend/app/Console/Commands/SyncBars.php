@@ -28,60 +28,93 @@ class SyncBars extends Command
      */
     public function handle()
     {
-        $this->info('Iniciando sincronización de Bares CyL...');
+        $this->info('Iniciando sincronización de Bares CyL desde archivo CSV...');
 
-        $baseUrl = 'https://analisis.datosabiertos.jcyl.es/api/explore/v2.1/catalog/datasets/registro-de-turismo-de-castilla-y-leon/records';
+        $filePath = storage_path('app/RegistroTuristicoCompleto.csv');
 
-        // Filter for "Bares" or similar establishments
-        $queryParams = [
-             'where' => 'tipo LIKE "Bar%" OR tipo LIKE "Cafeter%" OR tipo LIKE "Restaurante%"',
-             'limit' => 100,
-             'offset' => 0,
-        ];
+        if (!file_exists($filePath)) {
+            $this->error('El archivo RegistroTuristicoCompleto.csv no se encuentra en storage/app/.');
+            $this->error('Por favor, descarga el archivo desde https://datosabiertos.jcyl.es/web/jcyl/risp/es/plantilla100/1284201406867/_/RegistroTuristicoCompleto.csv y guárdalo en esa ubicación.');
+            return 1;
+        }
+
+        if (($handle = fopen($filePath, 'r')) === FALSE) {
+            $this->error('No se pudo abrir el archivo CSV.');
+            return 1;
+        }
+
+        // Get header and find column indexes
+        $header = fgetcsv($handle, 0, ';');
+        if ($header === false) {
+             $this->error('No se pudo leer la cabecera del archivo CSV.');
+             fclose($handle);
+             return 1;
+        }
+        $columnMap = array_flip($header);
+        
+        $requiredColumns = ['N.Registro', 'Nombre', 'Dirección', 'Municipio', 'Provincia', 'Tipo', 'Plazas', 'GPS.Latitud', 'GPS.Longitud'];
+        foreach ($requiredColumns as $column) {
+            if (!isset($columnMap[$column])) {
+                $this->error("La columna requerida '{$column}' no se encuentra en el archivo CSV.");
+                fclose($handle);
+                return 1;
+            }
+        }
 
         $totalProcessed = 0;
-        $hasMore = true;
+        
+        // Count total lines for progress bar
+        $lineCount = 0;
+        $countHandle = fopen($filePath, 'r');
+        while (fgets($countHandle) !== false) {
+            $lineCount++;
+        }
+        fclose($countHandle);
+        $totalInFile = $lineCount > 0 ? $lineCount - 1 : 0; // Exclude header
 
-        while ($hasMore) {
-            $response = Http::withOptions(['verify' => false])->get($baseUrl, $queryParams);
+        $this->info("Archivo CSV encontrado con aproximadamente {$totalInFile} registros. Procesando...");
+        $this->getOutput()->progressStart($totalInFile);
 
-            if ($response->failed()) {
-                $this->error('Error conectando con la API: '.$response->status());
-                return;
-            }
+        DB::transaction(function () use ($handle, $columnMap, &$totalProcessed, $header) {
+            // Re-open handle to read from the start after counting
+            fclose($handle);
+            $handle = fopen(storage_path('app/RegistroTuristicoCompleto.csv'), 'r');
+            fgetcsv($handle, 0, ';'); // Skip header row again
 
-            $data = $response->json();
-            $records = $data['results'] ?? [];
-            $totalCount = $data['total_count'] ?? 0;
+            while (($data = fgetcsv($handle, 0, ';')) !== FALSE) {
+                // Ensure data array has the same number of elements as header
+                if (count($data) !== count($header)) {
+                    $this->getOutput()->progressAdvance();
+                    continue;
+                }
+                $record = array_combine($header, $data);
 
-            $this->info("API Response: Found " . count($records) . " records this batch. Total API count: " . $totalCount);
-
-            if (empty($records)) {
-                $hasMore = false;
-                break;
-            }
-
-            foreach ($records as $record) {
-                // Mapping keys based on debug output
-                $signatura = $record['n_registro'] ?? null;
-                if (! $signatura) {
+                // Filter for "Bares" or similar establishments
+                $type = $record['Tipo'] ?? '';
+                if (!preg_match('/^(Bar|Cafeter|Restaurante)/i', $type)) {
+                    $this->getOutput()->progressAdvance();
                     continue;
                 }
 
-                $name = $record['establecimiento'] ?? 'Sin nombre';
-                $address = $record['direccion'] ?? ($record['municipio'] ?? null); // Fallback
-                $municipality = $record['municipio'] ?? null; // usually exists
-                $province = $record['provincia'] ?? null;
-                $type = $record['tipo'] ?? 'Bar';
-                $seats = isset($record['plazas']) ? (int) $record['plazas'] : null;
+                $signatura = $record['N.Registro'] ?? null;
+                if (!$signatura) {
+                    $this->getOutput()->progressAdvance();
+                    continue;
+                }
 
-                // Geo - Key is 'posicion' in this dataset
-                $geo = $record['posicion'] ?? [];
-                // Force cast to array
-                $geo = (array) $geo;
+                $name = $record['Nombre'] ?? 'Sin nombre';
+                $address = $record['Dirección'] ?? ($record['Municipio'] ?? null);
+                $municipality = $record['Municipio'] ?? null;
+                $province = $record['Provincia'] ?? null;
+                $seats = isset($record['Plazas']) && is_numeric($record['Plazas']) ? (int) $record['Plazas'] : null;
 
-                $lat = $geo['lat'] ?? $record['gps_latitud'] ?? null;
-                $lon = $geo['lon'] ?? $record['gps_longitud'] ?? null;
+                $lat = !empty($record['GPS.Latitud']) ? (float) $record['GPS.Latitud'] : null;
+                $lon = !empty($record['GPS.Longitud']) ? (float) $record['GPS.Longitud'] : null;
+
+                if (is_null($lat) || is_null($lon)) {
+                    $this->getOutput()->progressAdvance();
+                    continue;
+                }
 
                 $barData = [
                     'registry_number' => $signatura,
@@ -94,32 +127,21 @@ class SyncBars extends Command
                     'longitude' => $lon,
                     'seats' => $seats,
                     'api_updated_at' => now(),
+                    'location' => DB::raw("ST_PointFromText('POINT($lon $lat)', 4326)"),
                 ];
-
-                $bar = Bar::updateOrCreate(
+                
+                Bar::updateOrCreate(
                     ['registry_number' => $signatura],
                     $barData
                 );
-
-                // Update Spatial Column separately using raw SQL if coordinates exist
-                if ($lat && $lon) {
-                    $id = $bar->id;
-                    DB::statement("UPDATE bars SET location = ST_GeomFromText('POINT($lon $lat)', 4326) WHERE id = ?", [$id]);
-                }
-
+                
                 $totalProcessed++;
+                $this->getOutput()->progressAdvance();
             }
+        });
 
-            $this->info("Procesados: $totalProcessed / $totalCount");
+        $this->getOutput()->progressFinish();
 
-            $queryParams['offset'] += 100;
-            if ($queryParams['offset'] >= $totalCount) {
-                $hasMore = false;
-            }
-
-            sleep(1);
-        }
-
-        $this->info('Sincronización completada exitosamente.');
+        $this->info("Sincronización completada. Se han procesado {$totalProcessed} bares, cafeterías y restaurantes.");
     }
 }

@@ -26,7 +26,7 @@ return new class extends Migration
 
             // Spatial column for Database-level 'Nearest Neighbor' queries
             // MariaDB requires SRID 4326 for GPS coordinates
-            $table->geometry('location', subtype: 'point', srid: 4326)->nullable();
+            $table->geometry('location', subtype: 'point', srid: 4326);
 
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
