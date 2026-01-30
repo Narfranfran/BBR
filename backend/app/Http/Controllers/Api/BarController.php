@@ -62,7 +62,7 @@ class BarController extends Controller
             $query->orderBy('nombre');
         }
 
-        return BarResource::collection($query->paginate(20));
+        return BarResource::collection($query->paginate(500));
     }
 
     /**
