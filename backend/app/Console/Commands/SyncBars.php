@@ -1,11 +1,9 @@
 <?php
-
 namespace App\Console\Commands;
 
 use App\Models\Bar;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 
 class SyncBars extends Command
 {
@@ -28,120 +26,155 @@ class SyncBars extends Command
      */
     public function handle()
     {
-        $this->info('Iniciando sincronización de Bares CyL desde archivo CSV...');
+        $this->info('Iniciando sincronización de Bares CyL (Modo Robusto)...');
 
         $filePath = storage_path('app/RegistroTuristicoCompleto.csv');
 
-        if (!file_exists($filePath)) {
-            $this->error('El archivo RegistroTuristicoCompleto.csv no se encuentra en storage/app/.');
-            $this->error('Por favor, descarga el archivo desde https://datosabiertos.jcyl.es/web/jcyl/risp/es/plantilla100/1284201406867/_/RegistroTuristicoCompleto.csv y guárdalo en esa ubicación.');
+        if (! file_exists($filePath)) {
+            $this->error('ERROR: Archivo no encontrado en ' . $filePath);
             return 1;
         }
 
-        if (($handle = fopen($filePath, 'r')) === FALSE) {
-            $this->error('No se pudo abrir el archivo CSV.');
+        if (($handle = fopen($filePath, 'r')) === false) {
+            $this->error('ERROR: No se pudo abrir el archivo CSV.');
             return 1;
         }
 
-        // Get header and find column indexes
+        // Get header
         $header = fgetcsv($handle, 0, ';');
         if ($header === false) {
-             $this->error('No se pudo leer la cabecera del archivo CSV.');
-             fclose($handle);
-             return 1;
-        }
-        $columnMap = array_flip($header);
-        
-        $requiredColumns = ['N.Registro', 'Nombre', 'Dirección', 'Municipio', 'Provincia', 'Tipo', 'Plazas', 'GPS.Latitud', 'GPS.Longitud'];
-        foreach ($requiredColumns as $column) {
-            if (!isset($columnMap[$column])) {
-                $this->error("La columna requerida '{$column}' no se encuentra en el archivo CSV.");
-                fclose($handle);
-                return 1;
-            }
+            $this->error('ERROR: Cabecera vacía o ilegible.');
+            fclose($handle);
+            return 1;
         }
 
-        $totalProcessed = 0;
-        
-        // Count total lines for progress bar
-        $lineCount = 0;
+        // --- ROBUST INDEX DETECTION ---
+        // We find the index of columns by searching for keywords, avoiding encoding issues.
+        $findIndex = function ($patterns) use ($header) {
+            foreach ($header as $index => $col) {
+                foreach ((array) $patterns as $p) {
+                    // mb_stripos handles case-insensitive search safely
+                    if (mb_stripos($col, $p) !== false) {
+                        return $index;
+                    }
+
+                }
+            }
+            return false;
+        };
+
+        $idxRegistro = $findIndex(['N.Registro', 'Registro']);
+        $idxNombre   = $findIndex(['Nombre']);
+        $idxDirecc   = $findIndex(['Direcci', 'Direccion']); // Matches Dirección/Direccion
+        $idxMuni     = $findIndex(['Municipio']);
+        $idxProv     = $findIndex(['Provincia']);
+        $idxTipo     = $findIndex(['Tipo']);
+        $idxPlazas   = $findIndex(['Plazas']);
+        $idxLat      = $findIndex(['Latitud', 'GPS.Latitud']);
+        $idxLon      = $findIndex(['Longitud', 'GPS.Longitud']);
+
+        $missing = [];
+        if ($idxRegistro === false) {
+            $missing[] = 'N.Registro';
+        }
+
+        if ($idxLat === false) {
+            $missing[] = 'Latitud';
+        }
+
+        if (! empty($missing)) {
+            $this->error('Faltan columnas críticas: ' . implode(', ', $missing));
+            $this->info('Cabeceras encontradas: ' . implode(' | ', $header));
+            return 1;
+        }
+
+        // Count lines
+        $lineCount   = 0;
         $countHandle = fopen($filePath, 'r');
         while (fgets($countHandle) !== false) {
             $lineCount++;
         }
-        fclose($countHandle);
-        $totalInFile = $lineCount > 0 ? $lineCount - 1 : 0; // Exclude header
 
-        $this->info("Archivo CSV encontrado con aproximadamente {$totalInFile} registros. Procesando...");
+        fclose($countHandle);
+        $totalInFile = max(0, $lineCount - 1);
+
+        $this->info("Procesando {$totalInFile} registros detectados...");
         $this->getOutput()->progressStart($totalInFile);
 
-        DB::transaction(function () use ($handle, $columnMap, &$totalProcessed, $header) {
-            // Re-open handle to read from the start after counting
+        $totalProcessed = 0;
+
+        DB::transaction(function () use ($handle, &$totalProcessed, $idxRegistro, $idxNombre, $idxDirecc, $idxMuni, $idxProv, $idxTipo, $idxPlazas, $idxLat, $idxLon) {
+            // Reset checking pointer (we kept it open? better close and reopen to be safe)
             fclose($handle);
             $handle = fopen(storage_path('app/RegistroTuristicoCompleto.csv'), 'r');
-            fgetcsv($handle, 0, ';'); // Skip header row again
+            fgetcsv($handle, 0, ';'); // Skip header
 
-            while (($data = fgetcsv($handle, 0, ';')) !== FALSE) {
-                // Ensure data array has the same number of elements as header
-                if (count($data) !== count($header)) {
-                    $this->getOutput()->progressAdvance();
-                    continue;
-                }
-                $record = array_combine($header, $data);
-
-                // Filter for "Bares" or similar establishments
-                $type = $record['Tipo'] ?? '';
-                if (!preg_match('/^(Bar|Cafeter|Restaurante)/i', $type)) {
+            while (($data = fgetcsv($handle, 0, ';')) !== false) {
+                // Ensure we have enough columns for the max index we need (approx check)
+                if (count($data) < 5) {
                     $this->getOutput()->progressAdvance();
                     continue;
                 }
 
-                $signatura = $record['N.Registro'] ?? null;
-                if (!$signatura) {
+                // Filter Type
+                $type = ($idxTipo !== false && isset($data[$idxTipo])) ? $data[$idxTipo] : '';
+                // Strict filter for Bar/Restaurant/Cafeteria
+                if (! preg_match('/^(Bar|Cafeter|Restaurante)/i', $type)) {
                     $this->getOutput()->progressAdvance();
                     continue;
                 }
 
-                $name = $record['Nombre'] ?? 'Sin nombre';
-                $address = $record['Dirección'] ?? ($record['Municipio'] ?? null);
-                $municipality = $record['Municipio'] ?? null;
-                $province = $record['Provincia'] ?? null;
-                $seats = isset($record['Plazas']) && is_numeric($record['Plazas']) ? (int) $record['Plazas'] : null;
+                $signatura = $data[$idxRegistro] ?? null;
+                if (! $signatura) {
+                    $this->getOutput()->progressAdvance();
+                    continue;
+                }
 
-                $lat = !empty($record['GPS.Latitud']) ? (float) $record['GPS.Latitud'] : null;
-                $lon = !empty($record['GPS.Longitud']) ? (float) $record['GPS.Longitud'] : null;
+                $name    = ($idxNombre !== false && isset($data[$idxNombre])) ? $data[$idxNombre] : 'Sin nombre';
+                $muni    = ($idxMuni !== false && isset($data[$idxMuni])) ? $data[$idxMuni] : null;
+                $prov    = ($idxProv !== false && isset($data[$idxProv])) ? $data[$idxProv] : null;
+                $addrRaw = ($idxDirecc !== false && isset($data[$idxDirecc])) ? $data[$idxDirecc] : null;
+                $address = $addrRaw ?: $muni;
 
-                if (is_null($lat) || is_null($lon)) {
+                $seatsRaw = ($idxPlazas !== false && isset($data[$idxPlazas])) ? $data[$idxPlazas] : 0;
+                $seats    = is_numeric($seatsRaw) ? (int) $seatsRaw : null;
+
+                $latStr = ($idxLat !== false && isset($data[$idxLat])) ? str_replace(',', '.', $data[$idxLat]) : null;
+                $lonStr = ($idxLon !== false && isset($data[$idxLon])) ? str_replace(',', '.', $data[$idxLon]) : null;
+
+                $lat = is_numeric($latStr) ? (float) $latStr : null;
+                $lon = is_numeric($lonStr) ? (float) $lonStr : null;
+
+                if (is_null($lat) || is_null($lon) || ($lat == 0 && $lon == 0)) {
                     $this->getOutput()->progressAdvance();
                     continue;
                 }
 
                 $barData = [
-                    'registry_number' => $signatura,
-                    'name' => $name,
-                    'address' => $address,
-                    'municipality' => $municipality,
-                    'province' => $province,
-                    'type' => $type,
-                    'latitude' => $lat,
-                    'longitude' => $lon,
-                    'seats' => $seats,
-                    'api_updated_at' => now(),
-                    'location' => DB::raw("ST_PointFromText('POINT($lon $lat)', 4326)"),
+                    'fuente_id'      => $signatura,
+                    'nombre'         => $name,
+                    'direccion'      => $address,
+                    'municipio'      => $muni,
+                    'provincia'      => $prov,
+                    'tipo'           => $type,
+                    'lat'            => $lat,
+                    'lon'            => $lon,
+                    'plazas'         => $seats,
+                    'updated_api_at' => now(),
+                    'location'       => DB::raw("ST_PointFromText('POINT($lon $lat)', 4326)"),
                 ];
-                
+
                 Bar::updateOrCreate(
-                    ['registry_number' => $signatura],
+                    ['fuente_id' => $signatura],
                     $barData
                 );
-                
+
                 $totalProcessed++;
                 $this->getOutput()->progressAdvance();
             }
         });
 
         $this->getOutput()->progressFinish();
-
-        $this->info("Sincronización completada. Se han procesado {$totalProcessed} bares, cafeterías y restaurantes.");
+        $this->info("Hecho. {$totalProcessed} bares importados correctamente.");
     }
 }

@@ -17,23 +17,23 @@ class BarController extends Controller
 
         // Search by name
         if ($search = $request->input('search')) {
-            $query->where('name', 'like', "%{$search}%");
+            $query->where('nombre', 'like', "%{$search}%");
         }
 
         // Filter by Municipality
         if ($municipality = $request->input('municipality')) {
-            $query->where('municipality', $municipality);
+            $query->where('municipio', $municipality);
         }
 
         // Filter by Province
         if ($province = $request->input('province')) {
             // Flexible match or exact match. Using like for flexibility with dirty data
-            $query->where('province', 'like', "%{$province}%");
+            $query->where('provincia', 'like', "%{$province}%");
         }
 
         // Filter by Type
         if ($type = $request->input('type')) {
-            $query->where('type', 'like', "%{$type}%");
+            $query->where('tipo', 'like', "%{$type}%");
         }
 
         // Geospatial Search (Bars near a point)
@@ -59,7 +59,7 @@ class BarController extends Controller
             $query->withAvg('reviews', 'rating')
                 ->orderByDesc('reviews_avg_rating');
         } else {
-            $query->orderBy('name');
+            $query->orderBy('nombre');
         }
 
         return BarResource::collection($query->paginate(20));

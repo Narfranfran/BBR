@@ -3,41 +3,46 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
-import { UserCircle } from 'lucide-react';
+import { UserCircle, Terminal } from 'lucide-react';
 
 export default function Header() {
     const pathname = usePathname();
     const { user } = useAuth({ middleware: 'guest' });
 
-    // Simple breadcrumb logic
+    // Industrial Breadcrumbs
     const getBreadcrumbs = () => {
-        if (pathname === '/') return 'Explorar';
+        if (pathname === '/map') return 'MAPA_TOTAL';
         const parts = pathname.split('/').filter(Boolean);
-        return parts.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' / ');
+        return parts.map(p => p.toUpperCase()).join(' :: ');
     };
 
     return (
-        <header className="fixed top-0 left-0 right-0 z-30 ml-0 sm:ml-64 bg-white/80 backdrop-blur-sm border-b border-gray-200 h-16 flex items-center justify-between px-6 transition-all">
-            <div className="flex items-center">
-                 {/* Mobile Menu Trigger (Placeholder for now) */}
-                 <span className="text-gray-500 text-sm font-medium">BBr / {getBreadcrumbs()}</span>
+        <header className="fixed top-0 left-0 right-0 z-30 ml-0 sm:ml-64 bg-neutral-950/80 backdrop-blur-md border-b border-white/10 h-16 flex items-center justify-between px-6">
+            <div className="flex items-center gap-2">
+                 <Terminal className="w-4 h-4 text-orange-500" />
+                 <span className="text-neutral-400 font-mono text-xs tracking-wider uppercase">
+                    SYSTEM // {getBreadcrumbs()}
+                 </span>
             </div>
 
             <div className="flex items-center gap-4">
                 {user ? (
-                    <div className="flex items-center gap-2">
-                        <span className="text-sm text-gray-700 hidden sm:inline">{user.name}</span>
-                        <div className="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
-                             <UserCircle className="w-5 h-5" />
+                    <div className="flex items-center gap-3 pl-4 border-l border-white/10">
+                        <div className="text-right hidden sm:block">
+                            <span className="block text-xs text-orange-500 font-mono font-bold leading-none">USR_ID</span>
+                            <span className="text-sm text-white font-medium">{user.name}</span>
+                        </div>
+                        <div className="h-9 w-9 bg-neutral-900 border border-white/20 flex items-center justify-center text-white">
+                             <span className="font-mono font-bold">{user.name.charAt(0).toUpperCase()}</span>
                         </div>
                     </div>
                 ) : (
-                    <div className="flex items-center gap-3">
-                        <Link href="/login" className="text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors">
-                            Iniciar Sesión
+                    <div className="flex items-center gap-4">
+                        <Link href="/login" className="text-xs font-mono text-neutral-400 hover:text-white transition-colors uppercase tracking-widest">
+                            [ LOGIN ]
                         </Link>
-                        <Link href="/register" className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-full hover:bg-indigo-700 transition-colors shadow-sm">
-                            Registrarse
+                        <Link href="/register" className="px-5 py-2 bg-orange-600 text-black text-xs font-bold font-mono tracking-widest hover:bg-orange-500 transition-colors uppercase skew-x-[-10deg]">
+                            <span className="block skew-x-[10deg]">JOIN_NET</span>
                         </Link>
                     </div>
                 )}

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,28 +9,24 @@ class Bar extends Model
     use HasFactory;
 
     protected $fillable = [
-        'registry_number',
-        'name',
-        'address',
-        'municipality',
-        'province',
-        'type',
-        'latitude',
-        'longitude',
-        'location', // Added for mass assignment
-        'phone',
-        'email',
-        'web',
-        'description',
-        'seats',
-        'api_updated_at',
+        'fuente_id',
+        'nombre',
+        'tipo',
+        'provincia',
+        'municipio',
+        'direccion',
+        'lat',
+        'lon',
+        'location',
+        'plazas',
+        'updated_api_at',
     ];
 
     protected $casts = [
-        'latitude' => 'float',
-        'longitude' => 'float',
-        'seats' => 'integer',
-        'api_updated_at' => 'datetime',
+        'lat'            => 'float',
+        'lon'            => 'float',
+        'plazas'         => 'integer',
+        'updated_api_at' => 'datetime',
     ];
 
     public function favoritedBy()

@@ -1,9 +1,127 @@
-import MapContainer from '@/components/Map/MapContainer';
+import Link from 'next/link';
 
-export default function Home() {
+export default function LandingPage() {
   return (
-    <div className="h-[calc(100vh-4rem)] w-full overflow-hidden relative">
-      <MapContainer />
+    <div className="min-h-screen bg-neutral-950 text-white selection:bg-orange-500 selection:text-black font-sans">
+      {/* BACKGROUND TEXTURE */}
+      <div className="fixed inset-0 pointer-events-none z-50 opacity-[0.03]" style={{ backgroundImage: 'repeating-linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), repeating-linear-gradient(45deg, #000 25%, #202020 25%, #202020 75%, #000 75%, #000)' }}></div>
+
+      {/* HERO SECTION */}
+      <main className="flex flex-col relative z-10">
+        
+        {/* HEADER AREA */}
+        <header className="p-6 border-b border-white/10 flex justify-between items-end">
+          <div className="flex flex-col">
+            <h1 className="text-4xl md:text-8xl font-black tracking-tighter leading-none text-transparent bg-clip-text bg-linear-to-r from-white to-neutral-500 select-none">
+              BBR<span className="text-orange-500">.</span>
+            </h1>
+            <p className="font-mono text-xs md:text-sm text-orange-500 mt-2 tracking-widest uppercase">
+              /// Plataforma_de_Descubrimiento_Social
+            </p>
+          </div>
+          <div className="hidden md:block font-mono text-xs text-neutral-500 text-right leading-tight">
+            EST. 2026<br />
+            CASTILLA Y LEÓN<br />
+            <span className="text-green-500">● ONLINE</span>
+          </div>
+        </header>
+
+        {/* MAIN ACTION - ASYMMETRIC */}
+        <section className="grid grid-cols-1 md:grid-cols-12 min-h-[50vh] md:min-h-[60vh] border-b border-white/10">
+          {/* TEXT BLOCK */}
+          <div className="md:col-span-8 p-6 md:p-12 flex flex-col justify-center border-r border-white/10 relative overflow-hidden group">
+            {/* Background Text Decor */}
+            <span className="absolute -right-20 -bottom-20 text-[20rem] font-black text-white/5 pointer-events-none select-none group-hover:text-white/10 transition-colors leading-none">
+              GO
+            </span>
+
+            <h2 className="text-5xl md:text-8xl lg:text-9xl font-bold uppercase leading-[0.85] tracking-tight mb-8 relative z-10">
+              ENCUENTRA<br />
+              TU<br />
+              <span className="text-orange-500">SITIO.</span>
+            </h2>
+            <p className="max-w-xl text-neutral-400 text-lg md:text-xl font-light leading-relaxed">
+              Explora los mejores bares, eventos y comunidades de tu ciudad. 
+              <span className="block text-white font-medium mt-2">Sin filtros. Pura realidad.</span>
+            </p>
+          </div>
+
+          {/* GIANT LINK */}
+          <Link 
+            href="/map" 
+            className="md:col-span-4 bg-orange-600 hover:bg-orange-500 text-black flex items-center justify-center relative overflow-hidden transition-all duration-300 group"
+          >
+            <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay"></div>
+            <span className="relative z-10 text-4xl md:text-6xl font-black tracking-tighter group-hover:scale-105 transition-transform duration-300">
+              EXPLORAR &rarr;
+            </span>
+            {/* Hover Sweep */}
+            <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-500 mix-blend-overlay"></div>
+          </Link>
+        </section>
+
+        {/* PROVINCES SCROLL */}
+        <section className="border-b border-white/10 bg-neutral-900/30 backdrop-blur-sm">
+          <div className="p-4 border-b border-white/10 flex justify-between items-center">
+             <h3 className="font-mono text-sm text-neutral-500 uppercase tracking-widest">/// Zonas_Activas</h3>
+             <div className="flex gap-2">
+                <span className="w-2 h-2 bg-neutral-700 rounded-full"></span>
+                <span className="w-2 h-2 bg-neutral-700 rounded-full"></span>
+                <span className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></span>
+             </div>
+          </div>
+          <div className="flex overflow-x-auto no-scrollbar scroll-smooth">
+            {['VALLADOLID', 'LEÓN', 'SALAMANCA', 'BURGOS', 'PALENCIA', 'ZAMORA', 'ÁVILA', 'SEGOVIA', 'SORIA'].map((city, i) => (
+              <Link 
+                href={`/map?province=${city}`} 
+                key={city}
+                className={`
+                  shrink-0 px-8 py-10 md:px-12 md:py-16 border-r border-white/10 
+                  text-xl md:text-3xl font-bold tracking-tight text-neutral-500 hover:text-white hover:bg-neutral-900 transition-colors
+                  ${i === 0 ? 'text-white bg-white/5' : ''}
+                `}
+              >
+                {city}
+              </Link>
+            ))}
+             <div className="shrink-0 px-8 py-10 md:px-12 md:py-16 text-neutral-700 italic flex items-center">
+                + MÁS ZONAS
+             </div>
+          </div>
+        </section>
+
+        {/* FOOTER / STATUS SECTION */}
+        <footer className="grid grid-cols-1 md:grid-cols-4 border-b border-white/10 bg-black">
+             <div className="p-6 border-r border-white/10 md:col-span-1">
+                <h4 className="font-mono text-orange-500 text-xs mb-4 uppercase">/// Estado del servicio</h4>
+                <div className="flex items-center gap-2 text-green-500 font-mono text-sm">
+                  <span className="relative flex h-3 w-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                  </span>
+                  OPERATIVO
+                </div>
+             </div>
+             
+             <div className="p-6 border-r border-white/10 md:col-span-2">
+                <h4 className="font-mono text-orange-500 text-xs mb-4 uppercase">/// Sobre Nosotros</h4>
+                <p className="text-neutral-400 text-sm max-w-md">
+                  BuscaBares (BBr) es un proyecto Open Data para conectar personas con lugares reales. 
+                  Sin algoritmos ocultos.
+                </p>
+             </div>
+
+             <div className="p-6 md:col-span-1 flex flex-col justify-between text-right">
+                <Link href="/login" className="text-neutral-500 hover:text-white transition-colors font-mono text-sm uppercase mb-2 block">
+                   [ INICIAR SESIÓN ]
+                </Link>
+                 <Link href="/register" className="text-neutral-500 hover:text-white transition-colors font-mono text-sm uppercase block">
+                   [ REGISTRARSE ]
+                </Link>
+             </div>
+        </footer>
+
+      </main>
     </div>
   );
 }

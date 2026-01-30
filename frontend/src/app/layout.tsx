@@ -15,10 +15,8 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "BBr - BuscaBares",
   description: "Plataforma de Descubrimiento Social de Bares en CyL",
+  manifest: "/manifest.json",
 };
-
-import Sidebar from "@/components/Layout/Sidebar";
-import Header from "@/components/Layout/Header";
 
 export default function RootLayout({
   children,
@@ -30,13 +28,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50`}
       >
-        <Sidebar />
-        <Header />
-        
-        {/* Main Content Area - Pushed right by sidebar and down by header */}
-        <main className="sm:ml-64 pt-16 min-h-screen">
-          {children}
-        </main>
+        {children}
       </body>
     </html>
   );

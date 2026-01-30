@@ -13,32 +13,26 @@ return new class extends Migration
     {
         Schema::create('bars', function (Blueprint $table) {
             $table->id();
-            $table->string('registry_number')->unique()->comment('Identificador único del dataset JCyL');
-            $table->string('name');
-            $table->string('address')->nullable();
-            $table->string('municipality')->nullable();
-            $table->string('province')->nullable();
-            $table->string('type')->nullable();
+            $table->string('fuente_id')->unique()->comment('Identificador único del dataset JCyL (N.Registro)');
+            $table->string('nombre');
+            $table->string('tipo')->nullable();
+            $table->string('provincia')->nullable();
+            $table->string('municipio')->nullable();
+            $table->string('direccion')->nullable();
 
-            // Coordinates for easy frontend access
-            $table->decimal('latitude', 10, 8)->nullable();
-            $table->decimal('longitude', 11, 8)->nullable();
+            // Coordinates
+            $table->decimal('lat', 10, 8)->nullable();
+            $table->decimal('lon', 11, 8)->nullable();
 
-            // Spatial column for Database-level 'Nearest Neighbor' queries
-            // MariaDB requires SRID 4326 for GPS coordinates
+            $table->integer('plazas')->nullable();
+
+            // Strange characters handling (keep as location or maybe hidden)
             $table->geometry('location', subtype: 'point', srid: 4326);
 
-            $table->string('phone')->nullable();
-            $table->string('email')->nullable();
-            $table->string('web')->nullable();
-            $table->text('description')->nullable();
-
-            $table->integer('seats')->nullable()->comment('Plazas');
-            $table->timestamp('api_updated_at')->nullable();
-
+            $table->timestamp('updated_api_at')->nullable();
             $table->timestamps();
 
-            // Spatial Index for performance
+            // Spatial Index
             $table->spatialIndex('location');
         });
     }
