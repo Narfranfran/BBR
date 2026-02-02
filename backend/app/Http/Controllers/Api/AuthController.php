@@ -37,12 +37,19 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        \Illuminate\Support\Facades\Log::info('Login Attempt Info', [
+            'email' => $request->email,
+            'cookies' => $request->cookies->all(),
+            'headers' => $request->headers->all()
+        ]);
+
         $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
 
         if (!Auth::attempt($request->only('email', 'password'))) {
+            \Illuminate\Support\Facades\Log::info('Login Failed: Invalid credentials');
             throw ValidationException::withMessages([
                 'email' => ['Las credenciales son incorrectas.'],
             ]);
@@ -62,6 +69,25 @@ class AuthController extends Controller
 
     public function user(Request $request)
     {
-        return $request->user()->load(['favorites', 'reviews.bar']);
+        $user = $request->user()->load(['favorites', 'reviews.bar']);
+
+        // Force UTF-8 conversion for all fields to prevent JSON encoding errors
+        $clean = function ($data) use (&$clean) {
+            if (is_array($data)) {
+                return array_map($clean, $data);
+            }
+            if (is_string($data)) {
+                return mb_convert_encoding($data, 'UTF-8', 'UTF-8');
+            }
+            if ($data instanceof \Illuminate\Database\Eloquent\Model) {
+                 return $clean($data->toArray());
+            }
+            if ($data instanceof \Illuminate\Database\Eloquent\Collection) {
+                 return $clean($data->toArray());
+            }
+            return $data;
+        };
+
+        return response()->json($clean($user));
     }
 }

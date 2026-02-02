@@ -79,6 +79,8 @@ function MapController({ selectedProvince, searchQuery, bars }: { selectedProvin
   return null;
 }
 
+import { getCookie } from '@/utils/cookies';
+
 function PopupContent({ bar }: { bar: Bar }) {
     const { user, mutate } = useAuth();
     const [reviewMode, setReviewMode] = useState(false);
@@ -88,16 +90,22 @@ function PopupContent({ bar }: { bar: Bar }) {
 
     const isFavorite = user?.favorites?.some((f: any) => f.id === bar.id);
 
-    const toggleFavorite = async () => {
+    const toggleFavorite = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
         if (!user) return;
         try {
             await fetch(`${process.env.NEXT_PUBLIC_API_URL}/favorites/toggle`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json', 
+                    'Accept': 'application/json',
+                    'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN') || '')
+                },
                 body: JSON.stringify({ bar_id: bar.id }),
                 credentials: 'include'
             });
-            mutate(); // Refresh user data to update favorites list
+            mutate(); 
         } catch (e) {
             console.error(e);
         }
@@ -105,11 +113,16 @@ function PopupContent({ bar }: { bar: Bar }) {
 
     const submitReview = async (e: React.FormEvent) => {
         e.preventDefault();
+        e.stopPropagation();
         setStatus('sending');
         try {
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reviews`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json', 
+                    'Accept': 'application/json',
+                    'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN') || '')
+                },
                 body: JSON.stringify({ bar_id: bar.id, rating, comment }),
                 credentials: 'include'
             });
@@ -118,6 +131,9 @@ function PopupContent({ bar }: { bar: Bar }) {
                 setReviewMode(false);
                 setComment('');
                 mutate();
+             } else {
+                 console.error('Review failed', res.status);
+                 setStatus('error');
              }
         } catch (e) {
             console.error(e);
@@ -126,7 +142,10 @@ function PopupContent({ bar }: { bar: Bar }) {
     };
 
     return (
-        <div className="font-mono p-2 min-w-[220px]">
+        <div 
+            className="font-mono p-2 min-w-[220px]"
+            onClick={(e) => e.stopPropagation()}
+        >
             <strong className="text-sm font-black uppercase text-black block mb-1 border-b border-black/10 pb-1">
                 {bar.attributes.name}
             </strong>
@@ -151,7 +170,10 @@ function PopupContent({ bar }: { bar: Bar }) {
                                 {isFavorite ? 'Favorito' : 'Guardar'}
                             </button>
                             <button 
-                                onClick={() => setReviewMode(true)}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setReviewMode(true);
+                                }}
                                 className="flex-1 flex items-center justify-center gap-1 text-[10px] font-bold uppercase py-1 border border-neutral-300 bg-white text-black hover:bg-neutral-100 transition-colors"
                             >
                                 <MessageSquare className="w-3 h-3" />

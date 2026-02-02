@@ -2,12 +2,96 @@
 
 import { useAuth } from '@/hooks/useAuth';
 import Link from 'next/link';
-import { Star, MapPin } from 'lucide-react';
+import { Star, MapPin, Trash2, Edit2, X, Save, ArrowUpDown } from 'lucide-react';
+import { useState } from 'react';
+import { getCookie } from '@/utils/cookies';
 
 export default function Profile() {
-  const { user } = useAuth({ middleware: 'auth' });
+  const { user, mutate } = useAuth({ middleware: 'auth' });
+  
+  // States for Review Management
+  const [sortOrder, setSortOrder] = useState<'date' | 'rating' | 'name'>('date');
+  const [editingReview, setEditingReview] = useState<string | null>(null);
+  const [editForm, setEditForm] = useState({ rating: 0, comment: '' });
 
   if (!user) return <div className="p-8 font-mono text-orange-500 animate-pulse">/// CARGANDO_DATOS_USUARIO...</div>;
+
+  // Sorting Logic
+  const getSortedReviews = () => {
+    if (!user.reviews) return [];
+    
+    return [...user.reviews].sort((a, b) => {
+        if (sortOrder === 'date') return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        if (sortOrder === 'rating') return b.rating - a.rating;
+        if (sortOrder === 'name') return (a.bar?.nombre || '').localeCompare(b.bar?.nombre || '');
+        return 0;
+    });
+  };
+
+  // Handlers
+  const handleDeleteReview = async (reviewId: number) => {
+    if (!confirm('¿Estás seguro de eliminar esta reseña?')) return;
+
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reviews/${reviewId}`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN') || ''),
+            },
+            credentials: 'include',
+        });
+        if (response.ok) mutate(); 
+    } catch (e) {
+        console.error("Error deleting review", e);
+    }
+  };
+
+  const startEditing = (review: any) => {
+    setEditingReview(review.id);
+    setEditForm({ rating: review.rating, comment: review.comment });
+  };
+
+  const handleUpdateReview = async (reviewId: number) => {
+    try {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reviews/${reviewId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN') || ''),
+            },
+            body: JSON.stringify(editForm),
+            credentials: 'include',
+        });
+        if (response.ok) {
+            setEditingReview(null);
+            mutate();
+        }
+    } catch (e) {
+        console.error("Error updating review", e);
+    }
+  };
+
+  const handleRemoveFavorite = async (barId: number) => {
+    if (!confirm('¿Quitar de favoritos?')) return;
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/favorites/toggle`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN') || ''),
+            },
+            body: JSON.stringify({ bar_id: barId }),
+            credentials: 'include',
+        });
+        if (response.ok) mutate();
+    } catch (e) {
+        console.error("Error removing favorite", e);
+    }
+  };
+
 
   return (
     <div className="p-6 md:p-12 max-w-7xl mx-auto min-h-screen">
@@ -40,25 +124,70 @@ export default function Profile() {
                     <span className="text-orange-500 mr-2">///</span> 
                     Historial de Reseñas
                 </h2>
-                <span className="font-mono text-xs text-neutral-500">{user.reviews?.length || 0} RECORDS</span>
+                
+                <div className="flex items-center gap-4">
+                    {/* Sort Controls */}
+                    <div className="flex bg-white/5 rounded p-1">
+                        <button onClick={() => setSortOrder('date')} className={`px-2 py-1 text-[10px] uppercase font-mono ${sortOrder === 'date' ? 'bg-orange-500 text-black' : 'text-neutral-500 hover:text-white'}`}>Fecha</button>
+                        <button onClick={() => setSortOrder('rating')} className={`px-2 py-1 text-[10px] uppercase font-mono ${sortOrder === 'rating' ? 'bg-orange-500 text-black' : 'text-neutral-500 hover:text-white'}`}>Calif.</button>
+                        <button onClick={() => setSortOrder('name')} className={`px-2 py-1 text-[10px] uppercase font-mono ${sortOrder === 'name' ? 'bg-orange-500 text-black' : 'text-neutral-500 hover:text-white'}`}>Nombre</button>
+                    </div>
+                    <span className="font-mono text-xs text-neutral-500">{user.reviews?.length || 0} RECORDS</span>
+                </div>
             </div>
             
-            {user.reviews?.length > 0 ? (
+            {Array.isArray(user.reviews) && user.reviews.length > 0 ? (
                 <div className="grid gap-4">
-                    {user.reviews.map((review: any) => (
-                        <div key={review.id} className="bg-white/5 p-6 border border-white/10 hover:border-orange-500/50 transition-colors">
-                            <div className="flex justify-between items-start mb-2">
-                                <h3 className="text-white font-bold uppercase tracking-wide">{review.bar?.name || 'Local desconocido'}</h3>
-                                <div className="flex">
-                                    {[...Array(5)].map((_, i) => (
-                                        <Star key={i} className={`w-3 h-3 ${i < review.rating ? 'fill-orange-500 text-orange-500' : 'text-neutral-700'}`} />
-                                    ))}
+                    {getSortedReviews().map((review: any) => (
+                        <div key={review.id} className="bg-white/5 p-6 border border-white/10 hover:border-orange-500/50 transition-colors relative group/card">
+                            
+                            {/* Actions (Edit/Delete) - Absolute top right */}
+                            <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover/card:opacity-100 transition-opacity">
+                                <button onClick={() => startEditing(review)} className="text-neutral-500 hover:text-orange-500"><Edit2 className="w-3 h-3" /></button>
+                                <button onClick={() => handleDeleteReview(review.id)} className="text-neutral-500 hover:text-red-500"><Trash2 className="w-3 h-3" /></button>
+                            </div>
+
+                            {editingReview === review.id ? (
+                                // EDIT MODE
+                                <div className="space-y-3 animate-in fade-in zoom-in-95 duration-200">
+                                    <div className="flex justify-between items-center bg-black/30 p-2 rounded">
+                                        <h3 className="text-white font-bold uppercase tracking-wide text-sm">{review.bar?.nombre}</h3>
+                                        <button onClick={() => setEditingReview(null)}><X className="w-4 h-4 text-neutral-500 hover:text-white" /></button>
+                                    </div>
+                                    <div className="flex gap-1">
+                                         {[1, 2, 3, 4, 5].map((star) => (
+                                            <button key={star} onClick={() => setEditForm({...editForm, rating: star})}>
+                                                <Star className={`w-4 h-4 ${star <= editForm.rating ? 'fill-orange-500 text-orange-500' : 'text-neutral-700'}`} />
+                                            </button>
+                                         ))}
+                                    </div>
+                                    <textarea 
+                                        value={editForm.comment}
+                                        onChange={(e) => setEditForm({...editForm, comment: e.target.value})}
+                                        className="w-full bg-black/50 border border-white/10 text-white p-2 text-sm font-mono focus:border-orange-500 outline-none"
+                                        rows={3}
+                                    />
+                                    <button onClick={() => handleUpdateReview(review.id)} className="w-full bg-orange-600 hover:bg-orange-500 text-black font-bold uppercase text-[10px] py-2 flex items-center justify-center gap-2">
+                                        <Save className="w-3 h-3" /> Guardar Cambios
+                                    </button>
                                 </div>
-                            </div>
-                            <p className="text-neutral-400 text-sm font-mono leading-relaxed">"{review.comment}"</p>
-                            <div className="mt-2 text-[10px] text-neutral-600 font-mono uppercase">
-                                {new Date(review.created_at).toLocaleDateString()}
-                            </div>
+                            ) : (
+                                // VIEW MODE
+                                <>
+                                    <div className="flex justify-between items-start mb-2 pr-12"> {/* pr-12 for action buttons space */}
+                                        <h3 className="text-white font-bold uppercase tracking-wide">{review.bar?.nombre || 'Local desconocido'}</h3>
+                                        <div className="flex shrink-0">
+                                            {[...Array(5)].map((_, i) => (
+                                                <Star key={i} className={`w-3 h-3 ${i < (review.rating || 0) ? 'fill-orange-500 text-orange-500' : 'text-neutral-700'}`} />
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <p className="text-neutral-400 text-sm font-mono leading-relaxed break-words">"{review.comment}"</p>
+                                    <div className="mt-2 text-[10px] text-neutral-600 font-mono uppercase">
+                                        {review.created_at ? new Date(review.created_at).toLocaleDateString() : ''}
+                                    </div>
+                                </>
+                            )}
                         </div>
                     ))}
                 </div>
@@ -82,20 +211,30 @@ export default function Profile() {
                 <span className="font-mono text-xs text-neutral-500">{user.favorites?.length || 0} RECORDS</span>
             </div>
 
-             {user.favorites?.length > 0 ? (
+             {Array.isArray(user.favorites) && user.favorites.length > 0 ? (
                 <div className="grid gap-4">
                     {user.favorites.map((bar: any) => (
-                        <div key={bar.id} className="bg-white/5 p-6 border border-white/10 hover:border-red-500/50 transition-colors flex justify-between items-center">
+                        <div key={bar.id} className="bg-white/5 p-6 border border-white/10 hover:border-red-500/50 transition-colors flex justify-between items-center group/fav">
                             <div>
-                                <h3 className="text-white font-bold uppercase tracking-wide mb-1">{bar.name}</h3>
+                                <h3 className="text-white font-bold uppercase tracking-wide mb-1">{bar.nombre}</h3>
                                 <div className="flex items-center text-neutral-500 text-xs font-mono">
                                     <MapPin className="w-3 h-3 mr-1" />
-                                    {bar.municipality || 'Ubicación desconocida'}
+                                    {bar.municipio || 'Ubicación desconocida'}
                                 </div>
                             </div>
-                            <Link href="/map" className="text-xs border border-white/20 px-3 py-1 hover:bg-white hover:text-black transition-colors font-mono uppercase">
-                                Ver
-                            </Link>
+                            
+                            <div className="flex items-center gap-2">
+                                <Link href={`/map?search=${encodeURIComponent(bar.nombre)}`} className="text-xs border border-white/20 px-3 py-1 hover:bg-white hover:text-black transition-colors font-mono uppercase">
+                                    Ver
+                                </Link>
+                                <button 
+                                    onClick={() => handleRemoveFavorite(bar.id)}
+                                    className="text-neutral-600 hover:text-red-500 p-1 opacity-0 group-hover/fav:opacity-100 transition-opacity"
+                                    title="Quitar de favoritos"
+                                >
+                                    <X className="w-4 h-4" />
+                                </button>
+                            </div>
                         </div>
                     ))}
                 </div>

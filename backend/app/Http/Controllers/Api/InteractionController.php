@@ -57,4 +57,50 @@ class InteractionController extends Controller
             'review' => $review
         ]);
     }
+    /**
+     * Update an existing review
+     */
+    public function updateReview(Request $request, $id)
+    {
+        $review = Review::findOrFail($id);
+
+        if ($request->user()->id !== $review->user_id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'nullable|string|max:500',
+        ]);
+
+        $review->update([
+            'rating' => $request->rating,
+            'comment' => $request->comment,
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Reseña actualizada',
+            'review' => $review
+        ]);
+    }
+
+    /**
+     * Delete a review
+     */
+    public function deleteReview(Request $request, $id)
+    {
+        $review = Review::findOrFail($id);
+
+        if ($request->user()->id !== $review->user_id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $review->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Reseña eliminada'
+        ]);
+    }
 }

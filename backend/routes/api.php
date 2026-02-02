@@ -25,4 +25,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // Interactions
     Route::post('/favorites/toggle', [\App\Http\Controllers\Api\InteractionController::class, 'toggleFavorite']);
     Route::post('/reviews', [\App\Http\Controllers\Api\InteractionController::class, 'storeReview']);
+    Route::put('/reviews/{id}', [\App\Http\Controllers\Api\InteractionController::class, 'updateReview']);
+    Route::delete('/reviews/{id}', [\App\Http\Controllers\Api\InteractionController::class, 'deleteReview']);
 });
