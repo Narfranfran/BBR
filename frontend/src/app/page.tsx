@@ -1,4 +1,15 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Inicio',
+  description: 'Descubre los mejores bares y comunidades de Castilla y León. BBr es tu plataforma social de ocio.',
+  // SEO: og:title configured
+  openGraph: {
+    title: 'BBr - Inicio',
+    description: 'Descubre los mejores bares de CyL.',
+  },
+};
 
 export default function LandingPage() {
   return (

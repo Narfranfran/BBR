@@ -141,8 +141,9 @@ export default function ForgotPassword() {
             {step === 1 ? (
                  <form onSubmit={handleRequestCode} className="space-y-6">
                     <div>
-                        <label className="block text-xs font-mono text-neutral-400 uppercase mb-2">Identificador (Email)</label>
+                        <label htmlFor="email" className="block text-xs font-mono text-neutral-400 uppercase mb-2">Identificador (Email)</label>
                         <input
+                            id="email"
                             type="email"
                             required
                             className="block w-full bg-neutral-950 border border-white/10 text-white px-4 py-3 focus:outline-none focus:border-orange-500 font-mono text-sm"
@@ -166,8 +167,9 @@ export default function ForgotPassword() {
                     </div>
 
                     <div>
-                        <label className="block text-xs font-mono text-neutral-400 uppercase mb-2">Código de Verificación</label>
+                        <label htmlFor="code" className="block text-xs font-mono text-neutral-400 uppercase mb-2">Código de Verificación</label>
                         <input
+                            id="code"
                             type="text"
                             required
                             maxLength={6}
@@ -180,9 +182,10 @@ export default function ForgotPassword() {
 
                     <div className="grid gap-4">
                         <div>
-                            <label className="block text-xs font-mono text-neutral-400 uppercase mb-2">Nueva Clave</label>
+                            <label htmlFor="new-password" className="block text-xs font-mono text-neutral-400 uppercase mb-2">Nueva Clave</label>
                             <div className="relative">
                                 <input
+                                    id="new-password"
                                     type={showPassword ? "text" : "password"}
                                     required
                                     className="block w-full bg-neutral-950 border border-white/10 text-white px-4 py-3 focus:outline-none focus:border-orange-500 font-mono text-sm pr-10"
@@ -190,14 +193,15 @@ export default function ForgotPassword() {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
-                                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-white">
+                                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-white" aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}>
                                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                 </button>
                             </div>
                         </div>
                         <div>
-                             <label className="block text-xs font-mono text-neutral-400 uppercase mb-2">Confirmar Clave</label>
+                             <label htmlFor="new-password-confirmation" className="block text-xs font-mono text-neutral-400 uppercase mb-2">Confirmar Clave</label>
                             <input
+                                id="new-password-confirmation"
                                 type="password"
                                 required
                                 className="block w-full bg-neutral-950 border border-white/10 text-white px-4 py-3 focus:outline-none focus:border-orange-500 font-mono text-sm"

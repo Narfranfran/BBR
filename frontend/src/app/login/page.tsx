@@ -56,10 +56,11 @@ export default function Login() {
           <form className="space-y-6" onSubmit={submitForm}>
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-mono text-neutral-400 uppercase mb-2">
+                <label htmlFor="email" className="block text-xs font-mono text-neutral-400 uppercase mb-2">
                   Identificador (Email)
                 </label>
                 <input
+                  id="email"
                   type="email"
                   required
                   className="block w-full bg-neutral-950 border border-white/10 text-white px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 placeholder-neutral-700 transition-colors font-mono text-sm"
@@ -69,11 +70,12 @@ export default function Login() {
                 />
               </div>
               <div className="relative">
-                <label className="block text-xs font-mono text-neutral-400 uppercase mb-2">
+                <label htmlFor="password" className="block text-xs font-mono text-neutral-400 uppercase mb-2">
                   Clave de Acceso
                 </label>
                 <div className="relative">
                     <input
+                    id="password"
                     type={showPassword ? "text" : "password"}
                     required
                     className="block w-full bg-neutral-950 border border-white/10 text-white px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 placeholder-neutral-700 transition-colors font-mono text-sm pr-10"
@@ -85,6 +87,7 @@ export default function Login() {
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
                         className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-white"
+                        aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                     >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>

@@ -83,8 +83,9 @@ export default function Register() {
                 
                  {/* Name Field */}
                 <div>
-                     <label className="block text-xs font-mono text-neutral-400 uppercase mb-2">Nombre de Usuario</label>
+                     <label htmlFor="name" className="block text-xs font-mono text-neutral-400 uppercase mb-2">Nombre de Usuario</label>
                     <input
+                        id="name"
                         {...register('name')}
                         type="text"
                         className={`block w-full bg-neutral-950 border ${errors.name ? 'border-red-500' : 'border-white/10'} text-white px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 placeholder-neutral-700 transition-colors font-mono text-sm`}
@@ -95,8 +96,9 @@ export default function Register() {
 
                 {/* Email Field */}
                 <div>
-                    <label className="block text-xs font-mono text-neutral-400 uppercase mb-2">Email</label>
+                    <label htmlFor="email" className="block text-xs font-mono text-neutral-400 uppercase mb-2">Email</label>
                     <input
+                        id="email"
                         {...register('email')}
                         type="email"
                         className={`block w-full bg-neutral-950 border ${errors.email ? 'border-red-500' : 'border-white/10'} text-white px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 placeholder-neutral-700 transition-colors font-mono text-sm`}
@@ -108,9 +110,10 @@ export default function Register() {
                 {/* Password Fields Row */}
                 <div className="grid grid-cols-2 gap-4">
                     <div>
-                        <label className="block text-xs font-mono text-neutral-400 uppercase mb-2">Contraseña</label>
+                        <label htmlFor="password" className="block text-xs font-mono text-neutral-400 uppercase mb-2">Contraseña</label>
                         <div className="relative">
                             <input
+                                id="password"
                                 {...register('password')}
                                 type={showPassword ? "text" : "password"}
                                 className={`block w-full bg-neutral-950 border ${errors.password ? 'border-red-500' : 'border-white/10'} text-white px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 placeholder-neutral-700 transition-colors font-mono text-sm pr-8`}
@@ -120,6 +123,7 @@ export default function Register() {
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
                                 className="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-white"
+                                aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                             >
                                 {showPassword ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
                             </button>
@@ -127,9 +131,10 @@ export default function Register() {
                         {errors.password && <p className="text-red-500 text-[0.65rem] font-mono mt-1 uppercase">/// {errors.password.message}</p>}
                     </div>
                     <div>
-                         <label className="block text-xs font-mono text-neutral-400 uppercase mb-2">Confirmar</label>
+                         <label htmlFor="password_confirmation" className="block text-xs font-mono text-neutral-400 uppercase mb-2">Confirmar</label>
                          <div className="relative">
                             <input
+                                id="password_confirmation"
                                 {...register('password_confirmation')}
                                 type={showConfirmPassword ? "text" : "password"}
                                 className={`block w-full bg-neutral-950 border ${errors.password_confirmation ? 'border-red-500' : 'border-white/10'} text-white px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 placeholder-neutral-700 transition-colors font-mono text-sm pr-8`}
@@ -139,6 +144,7 @@ export default function Register() {
                                 type="button"
                                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                                 className="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-white"
+                                aria-label={showConfirmPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                             >
                                 {showConfirmPassword ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
                             </button>
@@ -153,10 +159,11 @@ export default function Register() {
                          <Info className="w-4 h-4 text-orange-500" />
                          <span className="text-xs font-mono text-orange-500 uppercase">Verificación Humana</span>
                     </div>
-                    <label className="block text-xs text-neutral-400 mb-2">
+                    <label htmlFor="captcha" className="block text-xs text-neutral-400 mb-2">
                         Resuelve: <span className="text-white font-bold">{captchaChallenge.num1} + {captchaChallenge.num2}</span>
                     </label>
                     <input
+                        id="captcha"
                         {...register('captcha')}
                         type="number"
                         className={`block w-full bg-neutral-950 border ${errors.captcha ? 'border-red-500' : 'border-white/10'} text-white px-4 py-2 focus:outline-none focus:border-orange-500 font-mono text-sm`}

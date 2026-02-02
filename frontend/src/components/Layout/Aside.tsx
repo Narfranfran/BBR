@@ -86,7 +86,14 @@ export default function Aside({ isOpen, setOpen }: { isOpen: boolean, setOpen: (
           </div>
         </div>
       </aside>
-      {isOpen && <div onClick={() => setOpen(false)} className="fixed inset-0 bg-black/50 z-30 sm:hidden"></div>}
+      {isOpen && (
+        <button 
+          type="button"
+          onClick={() => setOpen(false)} 
+          className="fixed inset-0 bg-black/50 z-30 sm:hidden w-full h-full cursor-default border-none"
+          aria-label="Cerrar menú"
+        />
+      )}
     </>
   );
 }
