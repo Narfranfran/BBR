@@ -21,4 +21,8 @@ Route::post('/login', [\App\Http\Controllers\Api\AuthController::class, 'login']
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [\App\Http\Controllers\Api\AuthController::class, 'user']);
     Route::post('/logout', [\App\Http\Controllers\Api\AuthController::class, 'logout']);
+
+    // Interactions
+    Route::post('/favorites/toggle', [\App\Http\Controllers\Api\InteractionController::class, 'toggleFavorite']);
+    Route::post('/reviews', [\App\Http\Controllers\Api\InteractionController::class, 'storeReview']);
 });

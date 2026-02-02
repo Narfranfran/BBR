@@ -64,11 +64,20 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: { middleware?: 
         credentials: 'include',
     });
 
+    console.log('Login Response Status:', response.status);
+    const text = await response.text();
+    console.log('Login Response Body:', text);
+
     if (response.ok) {
-        mutate();
+        await mutate();
     } else {
-        const data = await response.json();
-        setErrors(Object.entries(data.errors || {}).flat()); // Simplistic error handling
+        try {
+             const data = JSON.parse(text);
+             setErrors(Object.entries(data.errors || {}).flat());
+        } catch (e) {
+             console.error('Error parsing login response:', e);
+             setErrors(['Error desconocido en el servidor']);
+        }
     }
   };
 
