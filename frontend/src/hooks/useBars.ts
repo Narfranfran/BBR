@@ -11,7 +11,7 @@ export interface Bar {
     municipality: string;
     province: string;
     type: string;
-    reviews_avg_rating?: number; // From withAvg
+    rating?: number; // Normalized from API (was reviews_avg_rating)
     seats?: number;
     coordinates: {
       lat: number;

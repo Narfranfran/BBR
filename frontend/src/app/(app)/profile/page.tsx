@@ -9,6 +9,8 @@ import { getCookie } from '@/utils/cookies';
 export default function Profile() {
   const { user, mutate } = useAuth({ middleware: 'auth' });
   
+  const csrf = () => fetch(`${process.env.NEXT_PUBLIC_API_URL?.replace(/\/api\/?$/, '')}/sanctum/csrf-cookie`, { credentials: 'include' });
+  
   // States for Review Management
   const [sortOrder, setSortOrder] = useState<'date' | 'rating' | 'name'>('date');
   const [editingReview, setEditingReview] = useState<string | null>(null);
@@ -87,10 +89,51 @@ export default function Profile() {
             credentials: 'include',
         });
         if (response.ok) mutate();
-    } catch (e) {
+      } catch (e) {
         console.error("Error removing favorite", e);
     }
   };
+
+    const handleClearData = async () => {
+        try {
+            await csrf();
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/data`, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN') || ''),
+                },
+                credentials: 'include',
+            });
+            if (res.ok) {
+                await mutate();
+                alert('Tus datos han sido eliminados correctamente.');
+            }
+        } catch (error) {
+            console.error('Error clearing data:', error);
+            alert('Error al eliminar los datos.');
+        }
+    };
+
+    const handleDeleteAccount = async () => {
+        try {
+            await csrf();
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/account`, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN') || ''),
+                },
+                credentials: 'include',
+            });
+            if (res.ok) {
+                window.location.href = '/login';
+            }
+        } catch (error) {
+            console.error('Error deleting account:', error);
+            alert('Error al eliminar la cuenta.');
+        }
+    };
 
 
   return (
@@ -141,12 +184,6 @@ export default function Profile() {
                     {getSortedReviews().map((review: any) => (
                         <div key={review.id} className="bg-white/5 p-6 border border-white/10 hover:border-orange-500/50 transition-colors relative group/card">
                             
-                            {/* Actions (Edit/Delete) - Absolute top right */}
-                            <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover/card:opacity-100 transition-opacity">
-                                <button onClick={() => startEditing(review)} className="text-neutral-500 hover:text-orange-500"><Edit2 className="w-3 h-3" /></button>
-                                <button onClick={() => handleDeleteReview(review.id)} className="text-neutral-500 hover:text-red-500"><Trash2 className="w-3 h-3" /></button>
-                            </div>
-
                             {editingReview === review.id ? (
                                 // EDIT MODE
                                 <div className="space-y-3 animate-in fade-in zoom-in-95 duration-200">
@@ -173,20 +210,36 @@ export default function Profile() {
                                 </div>
                             ) : (
                                 // VIEW MODE
-                                <>
-                                    <div className="flex justify-between items-start mb-2 pr-12"> {/* pr-12 for action buttons space */}
-                                        <h3 className="text-white font-bold uppercase tracking-wide">{review.bar?.nombre || 'Local desconocido'}</h3>
-                                        <div className="flex shrink-0">
-                                            {[...Array(5)].map((_, i) => (
-                                                <Star key={i} className={`w-3 h-3 ${i < (review.rating || 0) ? 'fill-orange-500 text-orange-500' : 'text-neutral-700'}`} />
-                                            ))}
+                                <div className="flex justify-between gap-4">
+                                    <div className="flex-1 pr-4">
+                                        <h3 className="text-white font-bold uppercase tracking-wide mb-2">{review.bar?.nombre || 'Local desconocido'}</h3>
+                                        <p className="text-neutral-400 text-sm font-mono leading-relaxed text-wrap">"{review.comment}"</p>
+                                        <div className="mt-2 text-[10px] text-neutral-600 font-mono uppercase">
+                                            {review.created_at ? new Date(review.created_at).toLocaleDateString() : ''}
                                         </div>
                                     </div>
-                                    <p className="text-neutral-400 text-sm font-mono leading-relaxed break-words">"{review.comment}"</p>
-                                    <div className="mt-2 text-[10px] text-neutral-600 font-mono uppercase">
-                                        {review.created_at ? new Date(review.created_at).toLocaleDateString() : ''}
+                                    
+                                    <div className="flex flex-col items-end gap-2 shrink-0">
+                                        <div className="relative flex items-center">
+                                            {/* Actions - Positioned to the left of stars */}
+                                            <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 flex gap-2 opacity-0 group-hover/card:opacity-100 transition-opacity duration-200">
+                                                <button onClick={() => startEditing(review)} className="text-neutral-500 hover:text-orange-500 bg-black/50 rounded-full p-1 border border-white/10 hover:border-orange-500 transition-colors"><Edit2 className="w-3 h-3" /></button>
+                                                <button onClick={() => handleDeleteReview(review.id)} className="text-neutral-500 hover:text-red-500 bg-black/50 rounded-full p-1 border border-white/10 hover:border-red-500 transition-colors"><Trash2 className="w-3 h-3" /></button>
+                                            </div>
+
+                                            <div className="flex">
+                                                {[...Array(5)].map((_, i) => (
+                                                    <Star key={i} className={`w-3 h-3 ${i < (review.rating || 0) ? 'fill-orange-500 text-orange-500' : 'text-neutral-700'}`} />
+                                                ))}
+                                            </div>
+                                        </div>
+                                        {review.bar?.nombre && (
+                                            <Link href={`/map?search=${encodeURIComponent(review.bar.nombre)}`} className="text-[10px] border border-white/20 px-3 py-1 hover:bg-white hover:text-black transition-colors font-mono uppercase flex items-center gap-1 mt-auto">
+                                                Ver
+                                            </Link>
+                                        )}
                                     </div>
-                                </>
+                                </div>
                             )}
                         </div>
                     ))}
@@ -232,17 +285,54 @@ export default function Profile() {
                                     className="text-neutral-600 hover:text-red-500 p-1 opacity-0 group-hover/fav:opacity-100 transition-opacity"
                                     title="Quitar de favoritos"
                                 >
-                                    <X className="w-4 h-4" />
+                                    <Trash2 className="w-3 h-3" />
                                 </button>
                             </div>
                         </div>
                     ))}
                 </div>
-            ) : (
-                <div className="border border-white/5 bg-white/2 p-8 md:p-12 text-center">
-                    <p className="text-neutral-500 font-light text-lg">Sin marcadores guardados.</p>
+             ) : (
+                <div className="border border-white/5 bg-white/2 p-8 text-center">
+                    <p className="text-neutral-500 font-light text-sm">No has guardado ningún favorito aún.</p>
                 </div>
-            )}
+             )}
+        </div>
+
+        {/* Danger Zone */}
+        <div className="mt-16 pt-8 border-t border-red-900/30">
+            <h2 className="text-xl font-bold text-red-500 uppercase tracking-tight mb-4">
+                /// Zona de Peligro
+            </h2>
+            <div className="bg-red-950/10 border border-red-900/20 p-6 grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 className="text-white font-bold uppercase text-sm mb-2">Eliminar datos de actividad</h3>
+                    <p className="text-neutral-500 text-xs mb-4">Esto eliminará permanentemente todas tus reseñas y favoritos, pero mantendrá tu cuenta activa.</p>
+                    <button 
+                        onClick={() => {
+                            if(confirm('¿Estás SEGURO de que quieres eliminar todas tus reseñas y favoritos?\nEsta acción no se puede deshacer.')) {
+                                handleClearData();
+                            }
+                        }}
+                        className="border border-red-500/50 text-red-500 hover:bg-red-500 hover:text-white px-4 py-2 text-xs font-mono uppercase transition-colors"
+                    >
+                        Eliminar mis datos
+                    </button>
+                </div>
+                <div>
+                    <h3 className="text-white font-bold uppercase text-sm mb-2">Eliminar cuenta</h3>
+                    <p className="text-neutral-500 text-xs mb-4">Esto eliminará tu cuenta y todos tus datos asociados permanentemente. No podrás recuperar el acceso.</p>
+                    <button 
+                        onClick={() => {
+                            if(confirm('¿Estás SEGURO de que quieres eliminar tu cuenta?\nSe borrarán TODOS tus datos y perderás el acceso permanentemente.\n\nEscribe "CONFIRMAR" para continuar.') === true) {
+                                handleDeleteAccount();
+                            }
+                        }}
+                        className="bg-red-900/20 hover:bg-red-600 text-red-500 hover:text-white border border-red-500/50 px-4 py-2 text-xs font-mono uppercase transition-colors w-full md:w-auto"
+                    >
+                        Eliminar cuenta permanentemente
+                    </button>
+                </div>
+            </div>
         </div>
 
       </div>

@@ -3,7 +3,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
 import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Eye, EyeOff } from "lucide-react";
 
 export default function Login() {
   const { login } = useAuth({
@@ -12,6 +12,7 @@ export default function Login() {
   });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
   const [status, setStatus] = useState<string | null>(null);
 
@@ -29,7 +30,7 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-neutral-950 px-4 relative overflow-hidden">
       {/* Background Decor */}
-      <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-20"></div>
+      <div className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-transparent via-orange-500 to-transparent opacity-20"></div>
 
       <div className="max-w-md w-full relative z-10">
         <Link
@@ -67,18 +68,32 @@ export default function Login() {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
-              <div>
+              <div className="relative">
                 <label className="block text-xs font-mono text-neutral-400 uppercase mb-2">
                   Clave de Acceso
                 </label>
-                <input
-                  type="password"
-                  required
-                  className="block w-full bg-neutral-950 border border-white/10 text-white px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 placeholder-neutral-700 transition-colors font-mono text-sm"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <div className="relative">
+                    <input
+                    type={showPassword ? "text" : "password"}
+                    required
+                    className="block w-full bg-neutral-950 border border-white/10 text-white px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 placeholder-neutral-700 transition-colors font-mono text-sm pr-10"
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-white"
+                    >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                </div>
+                <div className="mt-2 text-right">
+                    <Link href="/forgot-password" className="text-[0.65rem] text-neutral-500 hover:text-orange-500 font-mono uppercase">
+                        ¿Olvidaste tu contraseña?
+                    </Link>
+                </div>
               </div>
             </div>
 
@@ -103,7 +118,7 @@ export default function Login() {
               Iniciar Sesión
             </button>
           </form>
-
+          
           <div className="mt-8 text-center pt-8 border-t border-white/5">
             <p className="text-neutral-500 text-sm">
               ¿No tienes ID?{" "}

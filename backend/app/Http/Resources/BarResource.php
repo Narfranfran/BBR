@@ -22,7 +22,7 @@ class BarResource extends JsonResource
                 'municipality' => $this->municipio,
                 'province'     => $this->provincia,
                 'type'         => $this->tipo,
-                'rating'       => $this->whenNotNull($this->reviews_avg_rating),
+                'rating'       => $this->reviews_avg_rating ? (float)$this->reviews_avg_rating : null,
                 'coordinates'  => [
                     'lat' => $this->lat,
                     'lon' => $this->lon,

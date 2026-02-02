@@ -57,6 +57,7 @@ class BarController extends Controller
             );
         } elseif ($request->input('sort') === 'rating') {
             $query->withAvg('reviews', 'rating')
+                ->has('reviews') // Strict functionality: Only bars with reviews
                 ->orderByDesc('reviews_avg_rating');
         } else {
             $query->orderBy('nombre');

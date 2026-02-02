@@ -6,16 +6,16 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { ChevronLeft, Info } from 'lucide-react';
+import { ChevronLeft, Info, Eye, EyeOff } from 'lucide-react';
 
 const registerSchema = z.object({
   name: z.string().min(1, 'IDENTIFIER_REQUIRED'),
-  email: z.string().email('INVALID_EMAIL_FORMAT'),
-  password: z.string().min(8, 'PASSWORD_TOO_SHORT_MIN_8'),
+  email: z.string().email('Formato de email inválido'),
+  password: z.string().min(8, 'La contraseña debe tener al menos 8 caracteres'),
   password_confirmation: z.string(),
   captcha: z.string().min(1, 'CAPTCHA_REQUIRED'),
 }).refine((data) => data.password === data.password_confirmation, {
-  message: "PASSWORDS_DO_NOT_MATCH",
+  message: "Las contraseñas no coinciden",
   path: ["password_confirmation"],
 });
 
@@ -25,6 +25,8 @@ export default function Register() {
   const { register: registerUser } = useAuth({ middleware: 'guest', redirectIfAuthenticated: '/map' });
   const [serverErrors, setServerErrors] = useState<string[]>([]);
   const [captchaChallenge, setCaptchaChallenge] = useState({ num1: 0, num2: 0, result: 0 });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const { register, handleSubmit, formState: { errors }, setError } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
@@ -42,7 +44,7 @@ export default function Register() {
 
   const submitForm = async (data: RegisterFormData) => {
     if (parseInt(data.captcha) !== captchaChallenge.result) {
-      setError('captcha', { type: 'manual', message: 'SECURITY_CHECK_FAILED' });
+      setError('captcha', { type: 'manual', message: 'Verificación fallida' });
       generateCaptcha(); 
       return;
     }
@@ -59,7 +61,7 @@ export default function Register() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-neutral-950 px-4 py-12 relative overflow-hidden">
         {/* Background Decor */}
-      <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-20"></div>
+      <div className="absolute inset-x-0 bottom-0 h-1 bg-linear-to-r from-transparent via-orange-500 to-transparent opacity-20"></div>
 
       <div className="max-w-md w-full relative z-10">
         <Link href="/" className="inline-flex items-center text-neutral-500 hover:text-white mb-8 transition-colors group">
@@ -107,23 +109,41 @@ export default function Register() {
                 <div className="grid grid-cols-2 gap-4">
                     <div>
                         <label className="block text-xs font-mono text-neutral-400 uppercase mb-2">Contraseña</label>
-                        <input
-                            {...register('password')}
-                            type="password"
-                            className={`block w-full bg-neutral-950 border ${errors.password ? 'border-red-500' : 'border-white/10'} text-white px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 placeholder-neutral-700 transition-colors font-mono text-sm`}
-                            placeholder="••••••••"
-                        />
-                        {errors.password && <p className="text-red-500 text-[0.65rem] font-mono mt-1 uppercase">/// ERROR</p>}
+                        <div className="relative">
+                            <input
+                                {...register('password')}
+                                type={showPassword ? "text" : "password"}
+                                className={`block w-full bg-neutral-950 border ${errors.password ? 'border-red-500' : 'border-white/10'} text-white px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 placeholder-neutral-700 transition-colors font-mono text-sm pr-8`}
+                                placeholder="••••••••"
+                            />
+                             <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-white"
+                            >
+                                {showPassword ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+                            </button>
+                        </div>
+                        {errors.password && <p className="text-red-500 text-[0.65rem] font-mono mt-1 uppercase">/// {errors.password.message}</p>}
                     </div>
                     <div>
                          <label className="block text-xs font-mono text-neutral-400 uppercase mb-2">Confirmar</label>
-                        <input
-                            {...register('password_confirmation')}
-                            type="password"
-                            className={`block w-full bg-neutral-950 border ${errors.password_confirmation ? 'border-red-500' : 'border-white/10'} text-white px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 placeholder-neutral-700 transition-colors font-mono text-sm`}
-                            placeholder="••••••••"
-                        />
-                         {errors.password_confirmation && <p className="text-red-500 text-[0.65rem] font-mono mt-1 uppercase">/// ERROR</p>}
+                         <div className="relative">
+                            <input
+                                {...register('password_confirmation')}
+                                type={showConfirmPassword ? "text" : "password"}
+                                className={`block w-full bg-neutral-950 border ${errors.password_confirmation ? 'border-red-500' : 'border-white/10'} text-white px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 placeholder-neutral-700 transition-colors font-mono text-sm pr-8`}
+                                placeholder="••••••••"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                className="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-white"
+                            >
+                                {showConfirmPassword ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+                            </button>
+                        </div>
+                         {errors.password_confirmation && <p className="text-red-500 text-[0.65rem] font-mono mt-1 uppercase">/// {errors.password_confirmation.message}</p>}
                     </div>
                 </div>
 

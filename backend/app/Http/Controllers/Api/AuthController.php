@@ -67,6 +67,21 @@ class AuthController extends Controller
         return response()->json(['message' => 'Logged out']);
     }
 
+    // Delete Account
+    public function deleteAccount(Request $request)
+    {
+        $user = $request->user();
+
+        Auth::guard('web')->logout();
+
+        $user->delete(); // Cascading delete handles related data (reviews, favorites)
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->json(['message' => 'Cuenta eliminada permanentemente.']);
+    }
+
     public function user(Request $request)
     {
         $user = $request->user()->load(['favorites', 'reviews.bar']);

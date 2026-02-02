@@ -27,4 +27,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/reviews', [\App\Http\Controllers\Api\InteractionController::class, 'storeReview']);
     Route::put('/reviews/{id}', [\App\Http\Controllers\Api\InteractionController::class, 'updateReview']);
     Route::delete('/reviews/{id}', [\App\Http\Controllers\Api\InteractionController::class, 'deleteReview']);
+
+    // User Danger Zone
+    Route::delete('/user/data', [\App\Http\Controllers\Api\UserController::class, 'clearData']);
+    Route::delete('/user/account', [\App\Http\Controllers\Api\AuthController::class, 'deleteAccount']);
 });
+
+// Password Reset Routes
+Route::post('/password/email', [\App\Http\Controllers\Api\PasswordResetController::class, 'sendResetCode']);
+Route::post('/password/code/check', [\App\Http\Controllers\Api\PasswordResetController::class, 'verifyResetCode']);
+Route::post('/password/reset', [\App\Http\Controllers\Api\PasswordResetController::class, 'resetPassword']);

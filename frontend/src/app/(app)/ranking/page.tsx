@@ -25,8 +25,7 @@ ChartJS.register(
 );
 
 const ESTABLISHMENT_TYPES = [
-    "Todos", "Restaurante", "Bar", "Cafetería", "Hotel", "Casa Rural", 
-    "Discoteca", "Pub", "Café-Bar", "Camping", "Pensión"
+    "Todos", "Restaurante", "Bar", "Cafetería"
 ];
 
 export default function Ranking() {
@@ -40,7 +39,7 @@ export default function Ranking() {
   });
 
     const filteredBars = useMemo(() => {
-    return bars.filter(bar => typeof bar.attributes.rating_avg === 'number' && !isNaN(bar.attributes.rating_avg));
+    return bars.filter(bar => typeof bar.attributes.rating === 'number' && !isNaN(bar.attributes.rating));
   }, [bars]);
 
   const provinces = useMemo(() => {
@@ -55,12 +54,12 @@ export default function Ranking() {
     datasets: [
       {
         label: 'VALORACIÓN',
-        data: topBars.map(b => b.attributes.rating_avg), 
+        data: topBars.map(b => b.attributes.rating), 
         backgroundColor: '#f97316',
         borderColor: '#f97316',
         borderWidth: 0,
         borderRadius: 2,
-        barThickness: 'flex',
+        barThickness: 'flex' as 'flex',
       },
     ],
   };
@@ -173,10 +172,10 @@ export default function Ranking() {
                   
                   <div className="flex items-center gap-2 border-t border-white/5 pt-4">
                       <div className="flex">
-                          {renderStars(bar.attributes.rating_avg)}
+                          {renderStars(bar.attributes.rating!)}
                       </div>
                       <span className="text-neutral-500 text-xs font-mono ml-auto">
-                          {typeof bar.attributes.rating_avg === 'number' ? `(${bar.attributes.rating_avg.toFixed(2)})` : '(N/A)'}
+                          {typeof bar.attributes.rating === 'number' ? `(${bar.attributes.rating.toFixed(2)})` : '(N/A)'}
                       </span>                  </div>
               </div>
           ))}
@@ -186,6 +185,7 @@ export default function Ranking() {
           <p>No se encontraron establecimientos con los filtros seleccionados.</p>
         </div>
       )}
+      
     </div>
   );
 }
