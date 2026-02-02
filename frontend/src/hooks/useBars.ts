@@ -11,7 +11,7 @@ export interface Bar {
     municipality: string;
     province: string;
     type: string;
-    rating?: number;
+    reviews_avg_rating?: number; // From withAvg
     seats?: number;
     coordinates: {
       lat: number;
@@ -29,6 +29,8 @@ export interface BarsFilters {
   province?: string;
   type?: string;
   search?: string;
+  sort?: 'rating'; 
+  // orderDirection is handled by backend logic now
 }
 
 export function useBars(filters?: BarsFilters) {
@@ -37,6 +39,7 @@ export function useBars(filters?: BarsFilters) {
   if (filters?.province) params.append('province', filters.province);
   if (filters?.type) params.append('type', filters.type);
   if (filters?.search) params.append('search', filters.search);
+  if (filters?.sort) params.append('sort', filters.sort);
 
   const queryString = params.toString() ? `?${params.toString()}` : "";
   
