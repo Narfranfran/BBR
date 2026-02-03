@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { ChevronLeft, Info, Eye, EyeOff } from 'lucide-react';
+import Footer from '@/components/Layout/Footer';
 
 const registerSchema = z.object({
   name: z.string().min(1, 'IDENTIFIER_REQUIRED'),
@@ -59,7 +60,8 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-neutral-950 px-4 py-12 relative overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-between bg-neutral-950 relative overflow-hidden">
+      <div className="flex-1 flex items-center justify-center w-full px-4 py-12">
         {/* Background Decor */}
       <div className="absolute inset-x-0 bottom-0 h-1 bg-linear-to-r from-transparent via-orange-500 to-transparent opacity-20"></div>
 
@@ -194,8 +196,10 @@ export default function Register() {
                     </Link>
                 </p>
             </div>
+        </div>
       </div>
-    </div>
+      </div>
+      <Footer />
     </div>
   );
 }

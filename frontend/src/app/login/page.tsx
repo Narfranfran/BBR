@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
 import Link from "next/link";
 import { ChevronLeft, Eye, EyeOff } from "lucide-react";
+import Footer from "@/components/Layout/Footer";
 
 export default function Login() {
   const { login } = useAuth({
@@ -28,7 +29,9 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-neutral-950 px-4 relative overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-between bg-neutral-950 relative overflow-hidden">
+      {/* Spacer for centering */}
+      <div className="flex-1 flex items-center justify-center w-full px-4 py-12">
       {/* Background Decor */}
       <div className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-transparent via-orange-500 to-transparent opacity-20"></div>
 
@@ -135,6 +138,8 @@ export default function Login() {
           </div>
         </div>
       </div>
+      </div>
+      <Footer />
     </div>
   );
 }

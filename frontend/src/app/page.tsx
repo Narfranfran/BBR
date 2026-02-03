@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import Footer from '@/components/Layout/Footer';
+import AuthButtons from '@/components/Landing/AuthButtons';
 
 export const metadata: Metadata = {
   title: 'Inicio',
@@ -20,21 +22,17 @@ export default function LandingPage() {
       {/* HERO SECTION */}
       <main className="flex flex-col relative z-10">
         
-        {/* HEADER AREA */}
-        <header className="p-6 border-b border-white/10 flex justify-between items-end">
+        <header className="p-6 border-b border-white/10 flex justify-between items-center bg-black/50 backdrop-blur-md sticky top-0 z-50">
           <div className="flex flex-col">
-            <h1 className="text-4xl md:text-8xl font-black tracking-tighter leading-none text-transparent bg-clip-text bg-linear-to-r from-white to-neutral-500 select-none">
+            <h1 className="text-4xl md:text-6xl font-black tracking-tighter leading-none text-transparent bg-clip-text bg-linear-to-r from-white to-neutral-500 select-none">
               BBR<span className="text-orange-500">.</span>
             </h1>
-            <p className="font-mono text-xs md:text-sm text-orange-500 mt-2 tracking-widest uppercase">
-              /// Plataforma_de_Descubrimiento_Social
+            <p className="font-mono text-[10px] md:text-xs text-orange-500 mt-1 tracking-widest uppercase">
+              /// Plataforma_de_Descubrimiento
             </p>
           </div>
-          <div className="hidden md:block font-mono text-xs text-neutral-500 text-right leading-tight">
-            EST. 2026<br />
-            CASTILLA Y LEÓN<br />
-            <span className="text-green-500">● ONLINE</span>
-          </div>
+          
+          <AuthButtons />
         </header>
 
         {/* MAIN ACTION - ASYMMETRIC */}
@@ -102,35 +100,7 @@ export default function LandingPage() {
         </section>
 
         {/* FOOTER / STATUS SECTION */}
-        <footer className="grid grid-cols-1 md:grid-cols-4 border-b border-white/10 bg-black">
-             <div className="p-6 border-r border-white/10 md:col-span-1">
-                <h4 className="font-mono text-orange-500 text-xs mb-4 uppercase">/// Estado del servicio</h4>
-                <div className="flex items-center gap-2 text-green-500 font-mono text-sm">
-                  <span className="relative flex h-3 w-3">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                  </span>
-                  OPERATIVO
-                </div>
-             </div>
-             
-             <div className="p-6 border-r border-white/10 md:col-span-2">
-                <h4 className="font-mono text-orange-500 text-xs mb-4 uppercase">/// Sobre Nosotros</h4>
-                <p className="text-neutral-400 text-sm max-w-md">
-                  BuscaBares (BBr) es un proyecto Open Data para conectar personas con lugares reales. 
-                  Sin algoritmos ocultos.
-                </p>
-             </div>
-
-             <div className="p-6 md:col-span-1 flex flex-col justify-between text-right">
-                <Link href="/login" className="text-neutral-500 hover:text-white transition-colors font-mono text-sm uppercase mb-2 block">
-                   [ INICIAR SESIÓN ]
-                </Link>
-                 <Link href="/register" className="text-neutral-500 hover:text-white transition-colors font-mono text-sm uppercase block">
-                   [ REGISTRARSE ]
-                </Link>
-             </div>
-        </footer>
+        <Footer />
 
       </main>
     </div>
