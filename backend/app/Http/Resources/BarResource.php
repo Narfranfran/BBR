@@ -34,6 +34,11 @@ class BarResource extends JsonResource
                 'accesible'    => $this->accesible,
                 'contact'      => null, // Legacy?
                 'description'  => null,
+                'top_review'   => $this->relationLoaded('topReview') && $this->topReview ? [
+                    'rating'  => $this->topReview->rating,
+                    'comment' => $this->topReview->comment,
+                    'user'    => $this->topReview->user ? $this->topReview->user->name : 'Anónimo'
+                ] : null,
             ],
             'links'      => [
                 'self' => route('api.bars.show', $this->id),

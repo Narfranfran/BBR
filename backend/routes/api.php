@@ -13,6 +13,7 @@ Route::get('/health', function () {
 // Public Bar Routes
 Route::get('/bars', [\App\Http\Controllers\Api\BarController::class, 'index'])->name('api.bars.index');
 Route::get('/bars/{id}', [\App\Http\Controllers\Api\BarController::class, 'show'])->name('api.bars.show');
+Route::get('/reviews/random', [\App\Http\Controllers\Api\InteractionController::class, 'getRandom']);
 
 // Auth Routes
 Route::post('/register', [\App\Http\Controllers\Api\AuthController::class, 'register']);

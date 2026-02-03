@@ -63,6 +63,14 @@ interface MapProps {
   bars: Bar[];
   selectedProvince?: string;
   searchQuery?: string;
+  focusedBarId?: string | null;
+}
+
+interface MapControllerProps {
+  selectedProvince?: string;
+  searchQuery?: string;
+  bars: Bar[];
+  focusedBarId?: string | null;
 }
 
 // Internal component to handle view state updates
@@ -70,14 +78,24 @@ function MapController({
   selectedProvince,
   searchQuery,
   bars,
-}: {
-  selectedProvince?: string;
-  searchQuery?: string;
-  bars: Bar[];
-}) {
+  focusedBarId
+}: MapControllerProps) {
   const map = useMap();
 
   useEffect(() => {
+    // 0. Priority: Focused Bar ID (Deep Link)
+    if (focusedBarId && bars.length > 0) {
+        const targetBar = bars.find(b => b.id.toString() === focusedBarId.toString());
+        if (targetBar) {
+            map.flyTo(
+                [targetBar.attributes.coordinates.lat, targetBar.attributes.coordinates.lon],
+                18, // Close zoom
+                { duration: 1.5 }
+            );
+            return; // Stop processing other view logic
+        }
+    }
+
     // 1. Prioritize Search: If searching and we have results, fit bounds to them
     if (searchQuery && bars.length > 0) {
       // If only one result, fly to it directly
@@ -105,7 +123,7 @@ function MapController({
       map.flyTo(PROVINCES[selectedProvince], 10, { duration: 1.5 });
     }
     // 3. Reset/Default view if nothing selected (Optional, but usually we leave it where user left it)
-  }, [selectedProvince, searchQuery, bars, map]);
+  }, [selectedProvince, searchQuery, bars, map, focusedBarId]);
 
   return null;
 }
@@ -322,7 +340,7 @@ function PopupContent({ bar }: { bar: Bar }) {
   );
 }
 
-export default function Map({ bars, selectedProvince, searchQuery }: MapProps) {
+export default function Map({ bars, selectedProvince, searchQuery, focusedBarId }: MapProps) {
   // Default center: CyL
   const center: [number, number] = [41.652, -4.724];
 
@@ -341,6 +359,7 @@ export default function Map({ bars, selectedProvince, searchQuery }: MapProps) {
         selectedProvince={selectedProvince}
         searchQuery={searchQuery}
         bars={bars}
+        focusedBarId={focusedBarId}
       />
 
       {bars.map((bar) => {

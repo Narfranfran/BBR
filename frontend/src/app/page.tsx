@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import Footer from '@/components/Layout/Footer';
 import AuthButtons from '@/components/Landing/AuthButtons';
+import ReviewsCarousel from '@/components/Landing/ReviewsCarousel';
 
 export const metadata: Metadata = {
   title: 'Inicio',
@@ -98,6 +99,9 @@ export default function LandingPage() {
              </div>
           </div>
         </section>
+
+        {/* REVIEW CAROUSEL */}
+        <ReviewsCarousel />
 
         {/* FOOTER / STATUS SECTION */}
         <Footer />

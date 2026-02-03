@@ -118,7 +118,7 @@ export default function Ranking() {
     <div className="p-4 sm:p-8 max-w-7xl mx-auto">
       <div className="mb-8 pb-6 border-b border-white/10">
         <h1 className="text-3xl sm:text-5xl font-black text-white uppercase tracking-tighter mb-2">
-            Ranking <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-yellow-500">Top Tier</span>
+            Ranking <span className="text-transparent bg-clip-text bg-linear-to-r from-orange-500 to-yellow-500">Top Tier</span>
         </h1>
         <p className="text-neutral-500 font-mono text-sm uppercase tracking-widest">
             /// Los establecimientos mejor valorados por la comunidad
@@ -142,7 +142,7 @@ export default function Ranking() {
       </div>
       
       {/* Chart Section */}
-      <div className="bg-neutral-900/50 p-4 sm:p-6 border border-white/5 mb-12 h-[30rem] relative">
+      <div className="bg-neutral-900/50 p-4 sm:p-6 border border-white/5 mb-12 h-120 relative">
         <div className="absolute top-4 right-4 text-xs font-mono text-neutral-600 uppercase border border-neutral-800 px-2 py-1">
             Analytics_View
         </div>
@@ -176,7 +176,29 @@ export default function Ranking() {
                       </div>
                       <span className="text-neutral-500 text-xs font-mono ml-auto">
                           {typeof bar.attributes.rating === 'number' ? `(${bar.attributes.rating.toFixed(2)})` : '(N/A)'}
-                      </span>                  </div>
+                      </span>
+                  </div>
+                  
+                  {/* Top Review Section */}
+                  {bar.attributes.top_review && (
+                      <div className="mt-4 bg-white/5 p-3 border-l-2 border-orange-500/50">
+                          <div className="flex items-center justify-between mb-1">
+                              <span className="text-[10px] font-bold text-orange-400 uppercase">{bar.attributes.top_review.user}</span>
+                              <div className="flex">
+                                  {[...Array(5)].map((_, i) => (
+                                      <Star key={i} className={`w-2 h-2 ${i < bar.attributes.top_review!.rating ? 'fill-orange-500 text-orange-500' : 'text-neutral-800'}`} />
+                                  ))}
+                              </div>
+                          </div>
+                          <p className="text-xs text-neutral-400 italic line-clamp-2">"{bar.attributes.top_review.comment}"</p>
+                      </div>
+                  )}
+                  
+                  <div className="mt-4 border-t border-white/5 pt-3 flex justify-end">
+                      <a href={`/map?barId=${bar.id}`} className="text-[10px] items-center gap-1 inline-flex text-orange-500 hover:text-white uppercase font-bold tracking-wider group-hover:translate-x-1 transition-transform">
+                          Ver en mapa &rarr;
+                      </a>
+                  </div>
               </div>
           ))}
         </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Review;
+use Illuminate\Support\Facades\Log;
 
 class InteractionController extends Controller
 {
@@ -57,6 +58,7 @@ class InteractionController extends Controller
             'review' => $review
         ]);
     }
+
     /**
      * Update an existing review
      */
@@ -102,5 +104,35 @@ class InteractionController extends Controller
             'status' => 'success',
             'message' => 'Reseña eliminada'
         ]);
+    }
+
+    /**
+     * Get random high-rated reviews
+     */
+    public function getRandom(Request $request)
+    {
+        Log::info('getRandom reviews called');
+        try {
+            $reviews = Review::with(['user', 'bar'])
+                ->where('rating', '>=', 4)
+                ->whereNotNull('comment')
+                ->where('comment', '!=', '')
+                ->inRandomOrder()
+                ->limit(10)
+                ->get();
+
+            return response()->json([
+                'status' => 'success',
+                'reviews' => $reviews
+            ], 200, [], JSON_INVALID_UTF8_SUBSTITUTE);
+        } catch (\Exception $e) {
+            Log::error('getRandom error: ' . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ], 500);
+        }
     }
 }

@@ -234,7 +234,7 @@ export default function Profile() {
                                             </div>
                                         </div>
                                         {review.bar?.nombre && (
-                                            <Link href={`/map?search=${encodeURIComponent(review.bar.nombre)}`} className="text-[10px] border border-white/20 px-3 py-1 hover:bg-white hover:text-black transition-colors font-mono uppercase flex items-center gap-1 mt-auto">
+                                            <Link href={`/map?barId=${review.bar_id}`} className="text-[10px] border border-white/20 px-3 py-1 hover:bg-white hover:text-black transition-colors font-mono uppercase flex items-center gap-1 mt-auto">
                                                 Ver
                                             </Link>
                                         )}
@@ -277,7 +277,7 @@ export default function Profile() {
                             </div>
                             
                             <div className="flex items-center gap-2">
-                                <Link href={`/map?search=${encodeURIComponent(bar.nombre)}`} className="text-xs border border-white/20 px-3 py-1 hover:bg-white hover:text-black transition-colors font-mono uppercase">
+                                <Link href={`/map?barId=${bar.id}`} className="text-xs border border-white/20 px-3 py-1 hover:bg-white hover:text-black transition-colors font-mono uppercase">
                                     Ver
                                 </Link>
                                 <button 

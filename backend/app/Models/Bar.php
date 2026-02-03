@@ -41,4 +41,14 @@ class Bar extends Model
     {
         return $this->hasMany(Review::class);
     }
+
+    public function topReview()
+    {
+        return $this->hasOne(Review::class)->ofMany([
+            'rating' => 'max',
+            'created_at' => 'max'
+        ], function ($query) {
+             $query->whereNotNull('comment')->where('comment', '!=', '');
+        });
+    }
 }

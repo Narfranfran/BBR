@@ -22,6 +22,11 @@ export interface Bar {
         email?: string;
         web?: string;
     };
+    top_review?: {
+        rating: number;
+        comment: string;
+        user: string;
+    } | null;
   };
 }
 

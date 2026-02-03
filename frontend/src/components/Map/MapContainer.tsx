@@ -47,6 +47,7 @@ export default function MapContainer() {
         bars={bars} 
         selectedProvince={filters.province}
         searchQuery={filters.search}
+        focusedBarId={searchParams.get('barId')}
       />
       
       <MapControls 
