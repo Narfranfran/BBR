@@ -29,7 +29,10 @@ class BarResource extends JsonResource
                 ],
                 // Formatting seats nicely
                 'seats'        => $this->plazas,
-                'contact'      => null,
+                'telefono'     => $this->telefono,
+                'web'          => $this->web,
+                'accesible'    => $this->accesible,
+                'contact'      => null, // Legacy?
                 'description'  => null,
             ],
             'links'      => [

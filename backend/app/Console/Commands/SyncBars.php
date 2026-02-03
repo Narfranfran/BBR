@@ -70,8 +70,11 @@ class SyncBars extends Command
         $idxProv     = $findIndex(['Provincia']);
         $idxTipo     = $findIndex(['Tipo']);
         $idxPlazas   = $findIndex(['Plazas']);
-        $idxLat      = $findIndex(['Latitud', 'GPS.Latitud']);
+                $idxLat      = $findIndex(['Latitud', 'GPS.Latitud']);
         $idxLon      = $findIndex(['Longitud', 'GPS.Longitud']);
+        $idxTel      = $findIndex(['Telefono', 'Teléfono']);
+        $idxWeb      = $findIndex(['Web', 'Página Web']);
+        $idxAccess   = $findIndex(['Accesible', 'discapacidad']);
 
         $missing = [];
         if ($idxRegistro === false) {
@@ -103,7 +106,7 @@ class SyncBars extends Command
 
         $totalProcessed = 0;
 
-        DB::transaction(function () use ($handle, &$totalProcessed, $idxRegistro, $idxNombre, $idxDirecc, $idxMuni, $idxProv, $idxTipo, $idxPlazas, $idxLat, $idxLon) {
+        DB::transaction(function () use ($handle, &$totalProcessed, $idxRegistro, $idxNombre, $idxDirecc, $idxMuni, $idxProv, $idxTipo, $idxPlazas, $idxLat, $idxLon, $idxTel, $idxWeb, $idxAccess) {
             // Reset checking pointer (we kept it open? better close and reopen to be safe)
             fclose($handle);
             $handle = fopen(storage_path('app/RegistroTuristicoCompleto.csv'), 'r');
@@ -145,6 +148,10 @@ class SyncBars extends Command
                 $lat = is_numeric($latStr) ? (float) $latStr : null;
                 $lon = is_numeric($lonStr) ? (float) $lonStr : null;
 
+                $tel     = ($idxTel !== false && isset($data[$idxTel])) ? $data[$idxTel] : null;
+                $web     = ($idxWeb !== false && isset($data[$idxWeb])) ? $data[$idxWeb] : null;
+                $access  = ($idxAccess !== false && isset($data[$idxAccess])) ? $data[$idxAccess] : null;
+
                 if (is_null($lat) || is_null($lon) || ($lat == 0 && $lon == 0)) {
                     $this->getOutput()->progressAdvance();
                     continue;
@@ -160,6 +167,9 @@ class SyncBars extends Command
                     'lat'            => $lat,
                     'lon'            => $lon,
                     'plazas'         => $seats,
+                    'telefono'       => $tel,
+                    'web'            => $web,
+                    'accesible'      => $access,
                     'updated_api_at' => now(),
                     'location'       => DB::raw("ST_PointFromText('POINT($lon $lat)', 4326)"),
                 ];

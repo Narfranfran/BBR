@@ -19,6 +19,9 @@ class Bar extends Model
         'lon',
         'location',
         'plazas',
+        'telefono',
+        'web',
+        'accesible',
         'updated_api_at',
     ];
 
