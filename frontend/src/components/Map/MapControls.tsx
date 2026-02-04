@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Search, Filter, MapPin } from 'lucide-react';
+import { Search, Filter, MapPin, X } from 'lucide-react';
 import { BarsFilters } from '@/hooks/useBars';
 
 interface MapControlsProps {
@@ -12,6 +12,7 @@ interface MapControlsProps {
 
 export default function MapControls({ filters, onFilterChange, totalResults }: MapControlsProps) {
     const [localSearch, setLocalSearch] = useState(filters.search || '');
+    const [showTip, setShowTip] = useState(true);
 
     useEffect(() => {
         setLocalSearch(filters.search || '');
@@ -34,6 +35,26 @@ export default function MapControls({ filters, onFilterChange, totalResults }: M
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             executeSearch();
+        }
+    };
+
+    // Helpler for color classes based on Type
+    const getTypeStyles = (type: string, isSelected: boolean) => {
+        const baseStyle = "text-[0.65rem] font-bold uppercase py-2 border transition-all duration-200";
+        
+        if (!isSelected) {
+            return `${baseStyle} bg-neutral-900 border-white/10 text-neutral-500 hover:border-white/30 hover:text-white`;
+        }
+
+        switch(type) {
+            case 'Bar':
+                return `${baseStyle} bg-cyan-500 border-cyan-500 text-black shadow-[0_0_15px_rgba(6,182,212,0.5)]`;
+            case 'Cafetería':
+                return `${baseStyle} bg-amber-500 border-amber-500 text-black shadow-[0_0_15px_rgba(245,158,11,0.5)]`;
+            case 'Restaurante':
+                return `${baseStyle} bg-rose-500 border-rose-500 text-white shadow-[0_0_15px_rgba(244,63,94,0.5)]`;
+            default:
+                return `${baseStyle} bg-white text-black`;
         }
     };
 
@@ -91,13 +112,7 @@ export default function MapControls({ filters, onFilterChange, totalResults }: M
                         <button
                             key={t}
                             onClick={() => handleTypeChange(t)}
-                            className={`
-                                text-[0.65rem] font-bold uppercase py-2 border transition-all duration-200
-                                ${filters.type === t 
-                                    ? 'bg-orange-500 border-orange-500 text-black' 
-                                    : 'bg-neutral-900 border-white/10 text-neutral-500 hover:border-white/30 hover:text-white'
-                                }
-                            `}
+                            className={getTypeStyles(t, filters.type === t)}
                         >
                             {t}
                         </button>
@@ -106,10 +121,21 @@ export default function MapControls({ filters, onFilterChange, totalResults }: M
             </div>
             
             {/* Quick Helper */}
-            <div className="bg-neutral-900/80 border border-white/5 p-2 flex gap-2 items-center backdrop-blur text-[0.6rem] text-neutral-500 font-mono uppercase">
-                <Filter className="w-3 h-3 text-orange-500" />
-                <span>Usa los filtros para refinar el mapa</span>
-            </div>
+            {showTip && (
+                <div className="bg-neutral-900/80 border border-white/5 p-2 flex gap-2 items-center justify-between backdrop-blur text-[0.6rem] text-neutral-500 font-mono uppercase transition-all">
+                    <div className="flex gap-2 items-center">
+                        <Filter className="w-3 h-3 text-orange-500" />
+                        <span>Usa los filtros para refinar el mapa</span>
+                    </div>
+                    <button 
+                        onClick={() => setShowTip(false)}
+                        className="hover:text-white transition-colors"
+                        aria-label="Cerrar consejo"
+                    >
+                        <X className="w-3 h-3" />
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

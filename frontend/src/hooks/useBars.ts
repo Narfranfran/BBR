@@ -12,6 +12,14 @@ export interface Bar {
     province: string;
     type: string;
     rating?: number; // Normalized from API (was reviews_avg_rating)
+    reviews_count?: number;
+    latest_reviews?: {
+        id: number;
+        rating: number;
+        comment: string;
+        date: string;
+        user: string;
+    }[];
     seats?: number;
     coordinates: {
       lat: number;

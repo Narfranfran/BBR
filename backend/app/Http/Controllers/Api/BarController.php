@@ -55,16 +55,21 @@ class BarController extends Controller
                 "ST_Distance_Sphere(location, ST_GeomFromText('POINT(? ?)', 4326)) ASC",
                 [$lon, $lat]
             );
-        } elseif ($request->input('sort') === 'rating') {
-            $query->withAvg('reviews', 'rating')
-                ->with(['topReview' => function($q) {
-                    $q->with('user'); // Also get user for avatar/name
-                }])
-                ->has('reviews') // Strict functionality: Only bars with reviews
-                ->orderByDesc('reviews_avg_rating');
         } else {
-            $query->orderBy('nombre');
+            // Default ordering or by rating
+            if ($request->input('sort') === 'rating') {
+                $query->orderByDesc('reviews_avg_rating');
+            } else {
+                $query->orderBy('nombre');
+            }
         }
+
+        // Always load basic social proof data
+        $query->withAvg('reviews', 'rating')
+              ->withCount('reviews')
+              ->with(['reviews' => function($q) {
+                  $q->latest()->limit(3);
+              }, 'reviews.user']); // Load user for the recent reviews
 
         return BarResource::collection($query->paginate(500));
     }
