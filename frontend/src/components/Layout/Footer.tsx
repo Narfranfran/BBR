@@ -17,8 +17,8 @@ export default function Footer() {
                    © BBr {currentYear}
                 </div>
                 <div className="flex gap-3">
-                    <Link href="/terms" className="hover:text-black">Términos</Link>
-                    <Link href="/privacy" className="hover:text-black">Privacidad</Link>
+                    <Link href="/terms" className="text-neutral-400 hover:text-black hover:underline transition-colors">Términos</Link>
+                    <Link href="/privacy" className="text-neutral-400 hover:text-black hover:underline transition-colors">Privacidad</Link>
                 </div>
             </footer>
         );
@@ -48,18 +48,18 @@ export default function Footer() {
                 <div>
                     <h4 className="text-white font-bold mb-4 uppercase tracking-widest">Navegación</h4>
                     <ul className="space-y-3">
-                        <li><Link href="/" className="hover:text-white transition-colors">Inicio</Link></li>
-                        <li><Link href="/map" className="hover:text-white transition-colors">Explorar Mapa</Link></li>
-                        <li><Link href="/login" className="hover:text-white transition-colors">Mi Cuenta</Link></li>
+                        <li><Link href="/" className="text-neutral-400 hover:text-white hover:underline transition-colors">Inicio</Link></li>
+                        <li><Link href="/map" className="text-neutral-400 hover:text-white hover:underline transition-colors">Explorar Mapa</Link></li>
+                        <li><Link href="/login" className="text-neutral-400 hover:text-white hover:underline transition-colors">Mi Cuenta</Link></li>
                     </ul>
                 </div>
 
                 <div>
                     <h4 className="text-white font-bold mb-4 uppercase tracking-widest">Legal</h4>
                     <ul className="space-y-3">
-                        <li><Link href="/terms" className="hover:text-white transition-colors">Términos</Link></li>
-                        <li><Link href="/privacy" className="hover:text-white transition-colors">Privacidad</Link></li>
-                        <li><Link href="/cookies" className="hover:text-white transition-colors">Cookies</Link></li>
+                        <li><Link href="/terms" className="text-neutral-400 hover:text-white hover:underline transition-colors">Términos</Link></li>
+                        <li><Link href="/privacy" className="text-neutral-400 hover:text-white hover:underline transition-colors">Privacidad</Link></li>
+                        <li><Link href="/cookies" className="text-neutral-400 hover:text-white hover:underline transition-colors">Cookies</Link></li>
                     </ul>
                 </div>
             </div>

@@ -8,16 +8,25 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { ChevronLeft, Info, Eye, EyeOff } from 'lucide-react';
 import Footer from '@/components/Layout/Footer';
+import PasswordStrength from '@/components/PasswordStrength';
 
 const registerSchema = z.object({
   name: z.string().min(1, 'IDENTIFIER_REQUIRED'),
   email: z.string().email('Formato de email inválido'),
-  password: z.string().min(8, 'La contraseña debe tener al menos 8 caracteres'),
+  password: z.string().min(8, 'La contraseña debe tener al menos 8 caracteres.'),
   password_confirmation: z.string(),
   captcha: z.string().min(1, 'CAPTCHA_REQUIRED'),
 }).refine((data) => data.password === data.password_confirmation, {
   message: "Las contraseñas no coinciden",
   path: ["password_confirmation"],
+})
+.refine((data) => /[A-Z]/.test(data.password), {
+    message: "La contraseña debe contener al menos una mayúscula.",
+    path: ["password"],
+})
+.refine((data) => /[^A-Za-z0-9]/.test(data.password), {
+    message: "La contraseña debe contener al menos un símbolo.",
+    path: ["password"],
 });
 
 type RegisterFormData = z.infer<typeof registerSchema>;
@@ -29,9 +38,12 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const { register, handleSubmit, formState: { errors }, setError } = useForm<RegisterFormData>({
+  const { register, handleSubmit, formState: { errors }, setError, watch } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
+    mode: 'onBlur'
   });
+
+  const password = watch('password');
 
   useEffect(() => {
     generateCaptcha();
@@ -110,49 +122,52 @@ export default function Register() {
                 </div>
 
                 {/* Password Fields Row */}
-                <div className="grid grid-cols-2 gap-4">
-                    <div>
-                        <label htmlFor="password" className="block text-xs font-mono text-neutral-400 uppercase mb-2">Contraseña</label>
-                        <div className="relative">
-                            <input
-                                id="password"
-                                {...register('password')}
-                                type={showPassword ? "text" : "password"}
-                                className={`block w-full bg-neutral-950 border ${errors.password ? 'border-red-500' : 'border-white/10'} text-white px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 placeholder-neutral-700 transition-colors font-mono text-sm pr-8`}
-                                placeholder="••••••••"
-                            />
-                             <button
-                                type="button"
-                                onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-white"
-                                aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
-                            >
-                                {showPassword ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
-                            </button>
+                <div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label htmlFor="password" className="block text-xs font-mono text-neutral-400 uppercase mb-2">Contraseña</label>
+                            <div className="relative">
+                                <input
+                                    id="password"
+                                    {...register('password')}
+                                    type={showPassword ? "text" : "password"}
+                                    className={`block w-full bg-neutral-950 border ${errors.password ? 'border-red-500' : 'border-white/10'} text-white px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 placeholder-neutral-700 transition-colors font-mono text-sm pr-8`}
+                                    placeholder="••••••••"
+                                />
+                                 <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-white"
+                                    aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                                >
+                                    {showPassword ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+                                </button>
+                            </div>
+                            {errors.password && <p className="text-red-500 text-[0.65rem] font-mono mt-1 uppercase">/// {errors.password.message}</p>}
                         </div>
-                        {errors.password && <p className="text-red-500 text-[0.65rem] font-mono mt-1 uppercase">/// {errors.password.message}</p>}
-                    </div>
-                    <div>
-                         <label htmlFor="password_confirmation" className="block text-xs font-mono text-neutral-400 uppercase mb-2">Confirmar</label>
-                         <div className="relative">
-                            <input
-                                id="password_confirmation"
-                                {...register('password_confirmation')}
-                                type={showConfirmPassword ? "text" : "password"}
-                                className={`block w-full bg-neutral-950 border ${errors.password_confirmation ? 'border-red-500' : 'border-white/10'} text-white px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 placeholder-neutral-700 transition-colors font-mono text-sm pr-8`}
-                                placeholder="••••••••"
-                            />
-                            <button
-                                type="button"
-                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                className="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-white"
-                                aria-label={showConfirmPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
-                            >
-                                {showConfirmPassword ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
-                            </button>
+                        <div>
+                             <label htmlFor="password_confirmation" className="block text-xs font-mono text-neutral-400 uppercase mb-2">Confirmar</label>
+                             <div className="relative">
+                                <input
+                                    id="password_confirmation"
+                                    {...register('password_confirmation')}
+                                    type={showConfirmPassword ? "text" : "password"}
+                                    className={`block w-full bg-neutral-950 border ${errors.password_confirmation ? 'border-red-500' : 'border-white/10'} text-white px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 placeholder-neutral-700 transition-colors font-mono text-sm pr-8`}
+                                    placeholder="••••••••"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-white"
+                                    aria-label={showConfirmPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                                >
+                                    {showConfirmPassword ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+                                </button>
+                            </div>
+                             {errors.password_confirmation && <p className="text-red-500 text-[0.65rem] font-mono mt-1 uppercase">/// {errors.password_confirmation.message}</p>}
                         </div>
-                         {errors.password_confirmation && <p className="text-red-500 text-[0.65rem] font-mono mt-1 uppercase">/// {errors.password_confirmation.message}</p>}
                     </div>
+                    <PasswordStrength password={password} />
                 </div>
 
                 {/* Captcha Challenge */}

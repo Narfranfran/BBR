@@ -6,59 +6,76 @@ export const metadata = {
   description: 'Términos y condiciones de uso de la plataforma BBr.',
 };
 
+const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
+  <div className="bg-neutral-900/50 border border-white/10 p-6 backdrop-blur-sm mb-8 rounded-lg">
+    <h2 className="text-2xl font-bold text-white mb-4 border-b border-white/10 pb-3">{title}</h2>
+    <div className="text-neutral-400 space-y-4">
+      {children}
+    </div>
+  </div>
+);
+
 export default function TermsPage() {
   return (
     <LegalPageLayout title="Términos y Condiciones">
-      <p className="lead text-xl text-neutral-300 mb-8">
+      <p className="text-xl text-neutral-300 mb-12 text-center italic">
         Bienvenido a BBr. Al utilizar nuestros servicios, aceptas estos términos. Están diseñados para asegurar una experiencia segura y auténtica para todos.
       </p>
 
-      <h2>1. Introducción</h2>
-      <p>
-        Bienvenido a BBr ("nosotros", "nuestro", o "la Plataforma"). Al acceder y utilizar nuestro sitio web y servicios, aceptas cumplir con estos Términos y Condiciones. 
-        Si no estás de acuerdo con alguna parte de estos términos, por favor, abstente de utilizar nuestros servicios.
-      </p>
+      <Section title="1. Introducción">
+        <p className="text-justify">
+          Bienvenido a BBr ("nosotros", "nuestro", o "la Plataforma"). Al acceder y utilizar nuestro sitio web y servicios, aceptas cumplir con estos Términos y Condiciones. 
+          Si no estás de acuerdo con alguna parte de estos términos, por favor, abstente de utilizar nuestros servicios.
+        </p>
+      </Section>
 
-      <h2>2. Uso de la Plataforma y Conducta</h2>
-      <p>
-        BBr es una plataforma de descubrimiento social. Valoramos la autenticidad y el respeto. Te comprometes a utilizar la plataforma legalmente y a:
-      </p>
-      <ul>
-        <li>No realizar actividades ilícitas, fraudulentas o dañinas.</li>
-        <li>No intentar vulnerar la seguridad de la plataforma ni acceder a cuentas de terceros.</li>
-        <li>Mantener un tono respetuoso en reseñas y comentarios. El discurso de odio, acoso o contenido inapropiado será eliminado.</li>
-      </ul>
+      <Section title="2. Uso de la Plataforma y Conducta">
+        <p className="text-justify">
+          BBr es una plataforma de descubrimiento social. Valoramos la autenticidad y el respeto. Te comprometes a utilizar la plataforma legalmente y a:
+        </p>
+        <ul className="list-disc list-inside space-y-2 text-neutral-400 pl-4">
+          <li>No realizar actividades ilícitas, fraudulentas o dañinas.</li>
+          <li>No intentar vulnerar la seguridad de la plataforma ni acceder a cuentas de terceros.</li>
+          <li>Mantener un tono respetuoso en reseñas y comentarios. El discurso de odio, acoso o contenido inapropiado será eliminado.</li>
+        </ul>
+      </Section>
 
-      <h2>3. Cuentas de Usuario</h2>
-      <p>
-        Eres responsable de mantener la seguridad de tu cuenta. Cualquier actividad realizada bajo tu perfil es tu responsabilidad. Notifícanos inmediatamente si detectas un acceso no autorizado.
-      </p>
+      <Section title="3. Cuentas de Usuario">
+        <p className="text-justify">
+          Eres responsable de mantener la seguridad de tu cuenta. Cualquier actividad realizada bajo tu perfil es tu responsabilidad. Notifícanos inmediatamente si detectas un acceso no autorizado.
+        </p>
+      </Section>
 
-      <h2>4. Contenido Generado por el Usuario</h2>
-      <p>
-        Al publicar en BBr, mantienes la propiedad de tu contenido, pero nos otorgas una licencia mundial, no exclusiva y gratuita para usarlo en relación con el funcionamiento y promoción de la plataforma.
-        Garantizas que tu contenido es original y no infringe derechos de terceros.
-      </p>
+      <Section title="4. Contenido Generado por el Usuario">
+        <p className="text-justify">
+          Al publicar en BBr, mantienes la propiedad de tu contenido, pero nos otorgas una licencia mundial, no exclusiva y gratuita para usarlo en relación con el funcionamiento y promoción de la plataforma.
+          Garantizas que tu contenido es original y no infringe derechos de terceros.
+        </p>
+      </Section>
 
-      <h2>5. Propiedad Intelectual</h2>
-      <p>
-        La marca BBr, el diseño, código y bases de datos son propiedad exclusiva de BBr. No está permitido copiar, modificar o distribuir nuestro contenido sin autorización expresa.
-      </p>
+      <Section title="5. Propiedad Intelectual">
+        <p className="text-justify">
+          La marca BBr, el diseño, código y bases de datos son propiedad exclusiva de BBr. No está permitido copiar, modificar o distribuir nuestro contenido sin autorización expresa.
+        </p>
+      </Section>
 
-      <h2>6. Limitación de Responsabilidad</h2>
-      <p>
-        BBr se ofrece "tal cual". No garantizamos que el servicio sea ininterrumpido o libre de errores. No nos hacemos responsables de daños indirectos derivados del uso de la plataforma, incluyendo la exactitud de la información de los establecimientos.
-      </p>
+      <Section title="6. Limitación de Responsabilidad">
+        <p className="text-justify">
+          BBr se ofrece "tal cual". No garantizamos que el servicio sea ininterrumpido o libre de errores. No nos hacemos responsables de daños indirectos derivados del uso de la plataforma, incluyendo la exactitud de la información de los establecimientos.
+        </p>
+      </Section>
 
-      <h2>7. Modificaciones</h2>
-      <p>
-        Podemos actualizar estos términos ocasionalmente. El uso continuado de la plataforma implica la aceptación de los nuevos términos.
-      </p>
+      <Section title="7. Modificaciones">
+        <p className="text-justify">
+          Podemos actualizar estos términos ocasionalmente. El uso continuado de la plataforma implica la aceptación de los nuevos términos.
+        </p>
+      </Section>
 
-      <h2>8. Contacto</h2>
-      <p>
-        Para dudas legales o reportes, contáctanos a través de nuestro soporte oficial o en legal@bbr.app (ficticio).
-      </p>
+      <Section title="8. Contacto">
+        <p className="text-justify">
+          Para dudas legales o reportes, contáctanos a través de nuestro soporte oficial o en legal@bbr.app (ficticio).
+        </p>
+      </Section>
     </LegalPageLayout>
   );
 }

@@ -80,23 +80,20 @@ export default function LandingPage() {
                 <span className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></span>
              </div>
           </div>
-          <div className="flex overflow-x-auto no-scrollbar scroll-smooth">
-            {['VALLADOLID', 'LEÓN', 'SALAMANCA', 'BURGOS', 'PALENCIA', 'ZAMORA', 'ÁVILA', 'SEGOVIA', 'SORIA'].map((city, i) => (
+          <div className="flex overflow-x-auto whitespace-nowrap">
+            {['VALLADOLID', 'LEÓN', 'SALAMANCA', 'BURGOS', 'PALENCIA', 'ZAMORA', 'ÁVILA', 'SEGOVIA', 'SORIA'].map((city) => (
               <Link 
                 href={`/map?province=${city}`} 
                 key={city}
-                className={`
-                  shrink-0 px-8 py-10 md:px-12 md:py-16 border-r border-white/10 
+                className="
+                  flex-grow px-8 py-10 md:px-12 md:py-16 border-r border-white/10 
                   text-xl md:text-3xl font-bold tracking-tight text-neutral-500 hover:text-white hover:bg-neutral-900 transition-colors
-                  ${i === 0 ? 'text-white bg-white/5' : ''}
-                `}
+                  flex items-center justify-center text-center
+                "
               >
                 {city}
               </Link>
             ))}
-             <div className="shrink-0 px-8 py-10 md:px-12 md:py-16 text-neutral-700 italic flex items-center">
-                + MÁS ZONAS
-             </div>
           </div>
         </section>
 

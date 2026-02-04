@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft, Info, Eye, EyeOff } from 'lucide-react';
+import PasswordStrength from '@/components/PasswordStrength';
 
 import { getCookie } from '@/utils/cookies';
 
@@ -18,6 +19,7 @@ export default function ForgotPassword() {
 
   const [status, setStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const csrf = () => fetch(`${process.env.NEXT_PUBLIC_API_URL?.replace(/\/api\/?$/, '')}/sanctum/csrf-cookie`, { credentials: 'include' });
@@ -61,12 +63,22 @@ export default function ForgotPassword() {
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
+    setPasswordError(null); // Clear previous password errors
+
     if (password !== passwordConfirmation) {
-        setError('Las contraseñas no coinciden.');
+        setPasswordError('Las contraseñas no coinciden.');
         return;
     }
     if (password.length < 8) {
-        setError('La contraseña debe tener al menos 8 caracteres.');
+        setPasswordError('La contraseña debe tener al menos 8 caracteres.');
+        return;
+    }
+    if (!/[A-Z]/.test(password)) {
+        setPasswordError('La contraseña debe contener al menos una mayúscula.');
+        return;
+    }
+    if (!/[^A-Za-z0-9]/.test(password)) {
+        setPasswordError('La contraseña debe contener al menos un símbolo.');
         return;
     }
 
@@ -197,6 +209,8 @@ export default function ForgotPassword() {
                                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                 </button>
                             </div>
+                             <PasswordStrength password={password} />
+                             {passwordError && <p className="text-red-500 text-[0.65rem] font-mono mt-1 uppercase">/// {passwordError}</p>}
                         </div>
                         <div>
                              <label htmlFor="new-password-confirmation" className="block text-xs font-mono text-neutral-400 uppercase mb-2">Confirmar Clave</label>

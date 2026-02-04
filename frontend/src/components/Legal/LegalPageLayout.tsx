@@ -46,11 +46,12 @@ export default function LegalPageLayout({ children, title, lastUpdated }: LegalP
         {/* Content */}
         <div className="prose prose-invert prose-neutral prose-lg max-w-none 
           prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-white
+          prose-h2:border-b prose-h2:border-neutral-800 prose-h2:pb-4
           prose-p:text-neutral-400 prose-p:leading-relaxed
-          prose-a:text-green-400 prose-a:no-underline hover:prose-a:text-green-300
+          prose-a:text-green-400 prose-a:font-semibold prose-a:no-underline hover:prose-a:text-green-300
           prose-strong:text-white
-          prose-ul:marker:text-neutral-600
-          prose-li:text-neutral-400">
+          prose-ul:pl-6 prose-ul:marker:text-green-500
+          prose-li:text-neutral-400 prose-li:py-1">
           {children}
         </div>
 
