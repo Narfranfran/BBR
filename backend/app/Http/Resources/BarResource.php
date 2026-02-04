@@ -22,7 +22,17 @@ class BarResource extends JsonResource
                 'municipality' => $this->municipio,
                 'province'     => $this->provincia,
                 'type'         => $this->tipo,
-                'rating'       => $this->reviews_avg_rating ? (float)$this->reviews_avg_rating : null,
+                'rating'       => $this->reviews_avg_rating ? round((float)$this->reviews_avg_rating, 1) : null,
+                'reviews_count'=> $this->reviews_count,
+                'latest_reviews' => $this->relationLoaded('reviews') ? $this->reviews->map(function($review) {
+                    return [
+                        'id' => $review->id,
+                        'rating' => $review->rating,
+                        'comment' => $review->comment,
+                        'date' => $review->created_at->format('Y-m-d'),
+                        'user' => $review->user ? $review->user->name : 'Anónimo'
+                    ];
+                }) : [],
                 'coordinates'  => [
                     'lat' => $this->lat,
                     'lon' => $this->lon,
@@ -34,11 +44,6 @@ class BarResource extends JsonResource
                 'accesible'    => $this->accesible,
                 'contact'      => null, // Legacy?
                 'description'  => null,
-                'top_review'   => $this->relationLoaded('topReview') && $this->topReview ? [
-                    'rating'  => $this->topReview->rating,
-                    'comment' => $this->topReview->comment,
-                    'user'    => $this->topReview->user ? $this->topReview->user->name : 'Anónimo'
-                ] : null,
             ],
             'links'      => [
                 'self' => route('api.bars.show', $this->id),
