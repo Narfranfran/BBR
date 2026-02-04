@@ -44,7 +44,7 @@ export default function Aside({ isOpen, setOpen }: { isOpen: boolean, setOpen: (
                 BBR<span className="text-orange-500 transition-all group-hover:text-white">.</span>
               </h1>
               <p className="font-mono text-[0.6rem] text-neutral-500 mt-1 tracking-widest uppercase group-hover:text-orange-500 transition-colors">
-                /// SYSTEM_V.1.0
+                {'///'} SYSTEM_V.1.0
               </p>
             </Link>
           </div>

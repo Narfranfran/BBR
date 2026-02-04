@@ -1,0 +1,176 @@
+
+> frontend@0.1.0 lint
+> eslint
+
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\app\(app)\about\page.tsx
+  12:80  error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  27:74  error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  41:74  error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\app\(app)\map\page.tsx
+  8:146  error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\app\(app)\profile\page.tsx
+    5:48   warning  'ArrowUpDown' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+   19:82   error    Comments inside children section of tag should be placed inside braces                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         react/jsx-no-comment-textnodes
+  152:75   error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\app\(app)\profile\page.tsx:152:75
+  150 |                     Citizen
+  151 |                 </span>
+> 152 |                 <span className="text-neutral-500 font-mono text-xs">ID: {Math.random().toString(36).substr(2, 9).toUpperCase()}</span>
+      |                                                                           ^^^^^^^^^^^^^ Cannot call impure function
+  153 |             </div>
+  154 |             <h1 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter leading-none mb-1">
+  155 |                 {user.name}  react-hooks/purity
+  167:60   error    Comments inside children section of tag should be placed inside braces                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         react/jsx-no-comment-textnodes
+  216:117  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                react/no-unescaped-entities
+  216:134  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                react/no-unescaped-entities
+  261:57   error    Comments inside children section of tag should be placed inside braces                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         react/jsx-no-comment-textnodes
+  303:90   error    Comments inside children section of tag should be placed inside braces                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         react/jsx-no-comment-textnodes
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\app\(app)\ranking\page.tsx
+  115:120  error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  123:85   error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  170:108  error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  193:87   error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`         react/no-unescaped-entities
+  193:123  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`         react/no-unescaped-entities
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\app\cookies\page.tsx
+  27:122  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  27:130  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\app\forgot-password\page.tsx
+   57:14   warning  'err' is defined but never used                                         @typescript-eslint/no-unused-vars
+  115:14   warning  'err' is defined but never used                                         @typescript-eslint/no-unused-vars
+  137:93   error    Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  143:129  error    Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  148:123  error    Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  213:116  error    Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\app\login\page.tsx
+   71:89   error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  136:34   error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  142:122  error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\app\page.tsx
+  31:108  error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  76:91   error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\app\register\page.tsx
+    4:28   warning  'useEffect' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+    9:23   warning  'Info' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           @typescript-eslint/no-unused-vars
+   48:5    warning  'setError' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+   55:20   warning  Compilation Skipped: Use of incompatible library
+
+This API returns functions which cannot be memoized without leading to stale UI. To prevent this, by default React Compiler will skip memoizing this component/hook. However, you may see issues if values from this API are passed to other components/hooks that are memoized.
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\app\register\page.tsx:55:20
+  53 |   });
+  54 |
+> 55 |   const password = watch('password');
+     |                    ^^^^^ React Hook Form's `useForm()` API returns a `watch()` function which cannot be memoized safely.
+  56 |
+  57 |   const onReCAPTCHAChange = (token: string | null) => {
+  58 |     setValue('recaptcha_token', token || '');  react-hooks/incompatible-library
+   94:91   error    Comments inside children section of tag should be placed inside braces                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     react/jsx-no-comment-textnodes
+  111:101  error    Comments inside children section of tag should be placed inside braces                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     react/jsx-no-comment-textnodes
+  124:102  error    Comments inside children section of tag should be placed inside braces                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     react/jsx-no-comment-textnodes
+  149:109  error    Comments inside children section of tag should be placed inside braces                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     react/jsx-no-comment-textnodes
+  170:122  error    Comments inside children section of tag should be placed inside braces                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     react/jsx-no-comment-textnodes
+  185:122  error    Comments inside children section of tag should be placed inside braces                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     react/jsx-no-comment-textnodes
+  189:68   error    Comments inside children section of tag should be placed inside braces                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     react/jsx-no-comment-textnodes
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\app\terms\page.tsx
+  27:29  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  27:38  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  27:41  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  27:49  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  27:54  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  27:68  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  64:25  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  64:34  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\components\Landing\AuthButtons.tsx
+  14:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\components\Landing\AuthButtons.tsx:14:9
+  12 |
+  13 |     useEffect(() => {
+> 14 |         setMounted(true);
+     |         ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  15 |     }, []);
+  16 |
+  17 |     if (!mounted) {  react-hooks/set-state-in-effect
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\components\Landing\ReviewCard.tsx
+  49:9   error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  49:26  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  63:9   error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\components\Landing\ReviewsCarousel.tsx
+  26:9   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\components\Landing\ReviewsCarousel.tsx:26:9
+  24 |         // The animation moves from 0 to -50%, showing Set 1 then sliding into Set 2
+  25 |         // When it hits -50% (start of Set 2), it snaps back to 0 (start of Set 1)
+> 26 |         setReviews([...filledParams, ...filledParams]);
+     |         ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  27 |       }
+  28 |     }
+  29 |   }, [data]);  react-hooks/set-state-in-effect
+  53:95  error  Comments inside children section of tag should be placed inside braces                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           react/jsx-no-comment-textnodes
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\components\Layout\Aside.tsx
+  46:148  error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\components\Layout\Navbar.tsx
+  6:10  warning  'UserCircle' is defined but never used  @typescript-eslint/no-unused-vars
+  6:38  warning  'X' is defined but never used           @typescript-eslint/no-unused-vars
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\components\Map\Map.tsx
+  213:96  error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  283:31  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`         react/no-unescaped-entities
+  283:48  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`         react/no-unescaped-entities
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\components\Map\MapContainer.tsx
+  12:137  error    Comments inside children section of tag should be placed inside braces                                      react/jsx-no-comment-textnodes
+  39:6    warning  React Hook useEffect has a missing dependency: 'filters'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  41:146  error    Comments inside children section of tag should be placed inside braces                                      react/jsx-no-comment-textnodes
+  42:127  error    Comments inside children section of tag should be placed inside braces                                      react/jsx-no-comment-textnodes
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\components\Map\MapControls.tsx
+  18:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\components\Map\MapControls.tsx:18:9
+  16 |
+  17 |     useEffect(() => {
+> 18 |         setLocalSearch(filters.search || '');
+     |         ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  19 |     }, [filters.search]);
+  20 |
+  21 |     const handleProvinceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {  react-hooks/set-state-in-effect
+
+Ô£û 66 problems (56 errors, 10 warnings)
+

@@ -46,7 +46,7 @@ export default function ReviewCard({ review }: { review: Review }) {
 
       {/* Comment */}
       <p className="text-neutral-300 text-sm leading-relaxed italic line-clamp-3 mb-4">
-        "{review.comment}"
+        &quot;{review.comment}&quot;
       </p>
 
       {/* View Button */}
@@ -60,7 +60,7 @@ export default function ReviewCard({ review }: { review: Review }) {
       
       {/* Decorative Quote */}
       <div className="absolute top-4 right-4 text-6xl font-serif text-white/5 pointer-events-none group-hover:text-orange-500/10 transition-colors">
-        "
+        &quot;
       </div>
     </div>
   );

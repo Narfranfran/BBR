@@ -10,7 +10,7 @@ export default function About() {
       
       <div className="bg-neutral-900/50 border border-white/10 rounded-sm p-6 mb-8">
         <h2 className="text-xl font-bold text-orange-500 mb-3 tracking-widest">
-          // MISIÓN
+          {'//'} MISIÓN
         </h2>
         <p className="text-neutral-300 leading-relaxed mb-4">
           Este proyecto tiene como objetivo ofrecer información actualizada sobre locales de hostelería en Castilla y León. 
@@ -24,7 +24,7 @@ export default function About() {
 
       <div className="grid md:grid-cols-2 gap-6 text-sm">
         <div className="bg-neutral-900/50 border border-white/10 rounded-sm p-6">
-          <h3 className="font-bold text-orange-500 mb-3 tracking-widest">// FUENTE DE DATOS</h3>
+          <h3 className="font-bold text-orange-500 mb-3 tracking-widest">{'//'} FUENTE DE DATOS</h3>
           <p className="text-neutral-400 mb-4">
             Los datos públicos se obtienen en tiempo real de la Junta de Castilla y León a través de su portal de Datos Abiertos.
           </p>
@@ -38,7 +38,7 @@ export default function About() {
         </div>
 
         <div className="bg-neutral-900/50 border border-white/10 rounded-sm p-6">
-          <h3 className="font-bold text-orange-500 mb-3 tracking-widest">// TECNOLOGÍA</h3>
+          <h3 className="font-bold text-orange-500 mb-3 tracking-widest">{'//'} TECNOLOGÍA</h3>
           <ul className="text-neutral-300 space-y-2">
             <li><span className="text-green-400 mr-2">&gt;</span>Next.js / React (Frontend)</li>
             <li><span className="text-green-400 mr-2">&gt;</span>Laravel API (Backend)</li>

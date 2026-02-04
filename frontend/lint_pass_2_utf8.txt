@@ -1,0 +1,120 @@
+
+> frontend@0.1.0 lint
+> eslint
+
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\app\(app)\about\page.tsx
+  12:80  error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  27:74  error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  41:74  error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\app\(app)\map\page.tsx
+  8:146  error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\app\(app)\profile\page.tsx
+    5:48  warning  'ArrowUpDown' is defined but never used                                 @typescript-eslint/no-unused-vars
+   19:82  error    Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  261:57  error    Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  303:90  error    Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\app\(app)\ranking\page.tsx
+  115:120  error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  123:85   error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  170:108  error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  193:87   error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`         react/no-unescaped-entities
+  193:123  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`         react/no-unescaped-entities
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\app\cookies\page.tsx
+  27:122  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  27:130  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\app\forgot-password\page.tsx
+   57:14   warning  'err' is defined but never used                                         @typescript-eslint/no-unused-vars
+  115:14   warning  'err' is defined but never used                                         @typescript-eslint/no-unused-vars
+  137:93   error    Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  143:129  error    Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  148:123  error    Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  213:116  error    Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\app\login\page.tsx
+   71:89   error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  136:34   error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  142:122  error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\app\page.tsx
+  31:108  error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  76:91   error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\app\register\page.tsx
+    4:28   warning  'useEffect' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+    9:23   warning  'Info' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           @typescript-eslint/no-unused-vars
+   48:5    warning  'setError' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+   55:20   warning  Compilation Skipped: Use of incompatible library
+
+This API returns functions which cannot be memoized without leading to stale UI. To prevent this, by default React Compiler will skip memoizing this component/hook. However, you may see issues if values from this API are passed to other components/hooks that are memoized.
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\app\register\page.tsx:55:20
+  53 |   });
+  54 |
+> 55 |   const password = watch('password');
+     |                    ^^^^^ React Hook Form's `useForm()` API returns a `watch()` function which cannot be memoized safely.
+  56 |
+  57 |   const onReCAPTCHAChange = (token: string | null) => {
+  58 |     setValue('recaptcha_token', token || '');  react-hooks/incompatible-library
+   94:91   error    Comments inside children section of tag should be placed inside braces                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     react/jsx-no-comment-textnodes
+  111:101  error    Comments inside children section of tag should be placed inside braces                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     react/jsx-no-comment-textnodes
+  124:102  error    Comments inside children section of tag should be placed inside braces                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     react/jsx-no-comment-textnodes
+  149:109  error    Comments inside children section of tag should be placed inside braces                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     react/jsx-no-comment-textnodes
+  170:122  error    Comments inside children section of tag should be placed inside braces                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     react/jsx-no-comment-textnodes
+  185:122  error    Comments inside children section of tag should be placed inside braces                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     react/jsx-no-comment-textnodes
+  189:68   error    Comments inside children section of tag should be placed inside braces                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     react/jsx-no-comment-textnodes
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\app\terms\page.tsx
+  27:29  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  27:38  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  27:41  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  27:49  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  27:54  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  27:68  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  64:25  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  64:34  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\components\Landing\AuthButtons.tsx
+  15:9  warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps')
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\components\Landing\ReviewCard.tsx
+  49:9   error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  49:26  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  63:9   error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\components\Landing\ReviewsCarousel.tsx
+   3:10  warning  'useEffect' is defined but never used                                                           @typescript-eslint/no-unused-vars
+   3:21  warning  'useState' is defined but never used                                                            @typescript-eslint/no-unused-vars
+  10:17  warning  'error' is assigned a value but never used                                                      @typescript-eslint/no-unused-vars
+  11:3   warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps')
+  43:95  error    Comments inside children section of tag should be placed inside braces                          react/jsx-no-comment-textnodes
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\components\Layout\Aside.tsx
+  46:148  error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\components\Layout\Navbar.tsx
+  6:10  warning  'UserCircle' is defined but never used  @typescript-eslint/no-unused-vars
+  6:38  warning  'X' is defined but never used           @typescript-eslint/no-unused-vars
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\components\Map\Map.tsx
+  213:96  error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  283:31  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`         react/no-unescaped-entities
+  283:48  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`         react/no-unescaped-entities
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\components\Map\MapContainer.tsx
+  12:137  error    Comments inside children section of tag should be placed inside braces                                      react/jsx-no-comment-textnodes
+  39:6    warning  React Hook useEffect has a missing dependency: 'filters'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  41:146  error    Comments inside children section of tag should be placed inside braces                                      react/jsx-no-comment-textnodes
+  42:127  error    Comments inside children section of tag should be placed inside braces                                      react/jsx-no-comment-textnodes
+
+C:\Users\frans\Documents\DAW\BBR\frontend\src\components\Map\MapControls.tsx
+  19:9  warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps')
+
+Ô£û 65 problems (49 errors, 16 warnings)
+  0 errors and 3 warnings potentially fixable with the `--fix` option.
+

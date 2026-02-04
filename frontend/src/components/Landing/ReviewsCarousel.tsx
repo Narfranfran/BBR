@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import useSWR from 'swr';
 import ReviewCard from './ReviewCard';
 
@@ -8,30 +8,20 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function ReviewsCarousel() {
   const { data, error } = useSWR('http://localhost:8000/api/reviews/random', fetcher);
-  const [reviews, setReviews] = useState<any[]>([]);
-
-  useEffect(() => {
+  /* eslint-disable react-hooks/exhaustive-deps */
+  const reviews = useMemo(() => {
     if (data && data.status === 'success') {
       const originalReviews = data.reviews;
       if (originalReviews.length > 0) {
-        // 1. Ensure we have enough items to fill a decent width (e.g. 10 items minimum)
         let filledParams = [...originalReviews];
         while (filledParams.length < 10) {
             filledParams = [...filledParams, ...originalReviews];
         }
-        
-        // 2. Create TWO exact copies of this filled list for the seamless loop
-        // The animation moves from 0 to -50%, showing Set 1 then sliding into Set 2
-        // When it hits -50% (start of Set 2), it snaps back to 0 (start of Set 1)
-        setReviews([...filledParams, ...filledParams]);
+        return [...filledParams, ...filledParams];
       }
     }
+    return [];
   }, [data]);
-
-  if (error) {
-    console.error("DEBUG: ReviewsCarousel SWR error:", error); 
-    return null; // Fail silently
-  }
   if (!data || !reviews.length) {
     console.log("DEBUG: ReviewsCarousel no data or loading");
     return null; // Show nothing while loading
@@ -51,7 +41,7 @@ export default function ReviewsCarousel() {
             </p>
           </div>
           <div className="hidden md:block text-orange-500/50 font-mono text-xs animate-pulse">
-              /// LIVE_FEED
+              {'///'} LIVE_FEED
           </div>
       </div>
 
@@ -59,7 +49,7 @@ export default function ReviewsCarousel() {
       <div className="relative w-full flex overflow-hidden mask-linear-fade">
         {/* CSS Animation Wrapper */}
         <div className="flex gap-6 animate-scroll px-6">
-          {reviews.map((review, i) => (
+          {reviews.map((review: any, i: number) => (
             <ReviewCard key={`${review.id}-${i}`} review={review} />
           ))}
         </div>

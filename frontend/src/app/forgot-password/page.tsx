@@ -135,18 +135,18 @@ export default function ForgotPassword() {
                     RECUPERACIÓN<span className="text-orange-500">.</span>
                 </h1>
                 <p className="text-neutral-500 font-mono text-xs uppercase tracking-widest">
-                    /// Acceso de emergencia
+                    {'///'} Acceso de emergencia
                 </p>
             </div>
 
             {status && (
                 <div className="bg-green-500/10 border border-green-500/20 p-4 mb-6 text-green-500 text-xs font-mono uppercase">
-                    /// {status}
+                    {'///'} {status}
                 </div>
             )}
             {error && (
                 <div className="bg-red-500/10 border border-red-500/20 p-4 mb-6 text-red-500 text-xs font-mono uppercase">
-                    /// ERROR: {error}
+                    {'///'} ERROR: {error}
                 </div>
             )}
 
@@ -210,7 +210,7 @@ export default function ForgotPassword() {
                                 </button>
                             </div>
                              <PasswordStrength password={password} />
-                             {passwordError && <p className="text-red-500 text-[0.65rem] font-mono mt-1 uppercase">/// {passwordError}</p>}
+                             {passwordError && <p className="text-red-500 text-[0.65rem] font-mono mt-1 uppercase">{'///'} {passwordError}</p>}
                         </div>
                         <div>
                              <label htmlFor="new-password-confirmation" className="block text-xs font-mono text-neutral-400 uppercase mb-2">Confirmar Clave</label>

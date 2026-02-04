@@ -211,7 +211,7 @@ function PopupContent({ bar }: { bar: Bar }) {
       </div>
 
       <span className="text-xs text-orange-600 font-bold block mb-1 uppercase tracking-widest">
-        /// {bar.attributes.type}
+        {'///'} {bar.attributes.type}
       </span>
       <span className="text-xs text-neutral-600 block leading-tight mb-3">
         {bar.attributes.address}
@@ -280,7 +280,7 @@ function PopupContent({ bar }: { bar: Bar }) {
                               </div>
                           </div>
                           <p className="text-[9px] text-neutral-600 leading-tight italic truncate">
-                              "{review.comment}"
+                              &quot;{review.comment}&quot;
                           </p>
                       </div>
                   ))}

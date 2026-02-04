@@ -24,7 +24,7 @@ export default function TermsPage() {
 
       <Section title="1. Introducción">
         <p className="text-justify">
-          Bienvenido a BBr ("nosotros", "nuestro", o "la Plataforma"). Al acceder y utilizar nuestro sitio web y servicios, aceptas cumplir con estos Términos y Condiciones. 
+          Bienvenido a BBr (&quot;nosotros&quot;, &quot;nuestro&quot;, o &quot;la Plataforma&quot;). Al acceder y utilizar nuestro sitio web y servicios, aceptas cumplir con estos Términos y Condiciones. 
           Si no estás de acuerdo con alguna parte de estos términos, por favor, abstente de utilizar nuestros servicios.
         </p>
       </Section>
@@ -61,7 +61,7 @@ export default function TermsPage() {
 
       <Section title="6. Limitación de Responsabilidad">
         <p className="text-justify">
-          BBr se ofrece "tal cual". No garantizamos que el servicio sea ininterrumpido o libre de errores. No nos hacemos responsables de daños indirectos derivados del uso de la plataforma, incluyendo la exactitud de la información de los establecimientos.
+          BBr se ofrece &quot;tal cual&quot;. No garantizamos que el servicio sea ininterrumpido o libre de errores. No nos hacemos responsables de daños indirectos derivados del uso de la plataforma, incluyendo la exactitud de la información de los establecimientos.
         </p>
       </Section>
 

@@ -24,7 +24,7 @@ export default function CookiesPage() {
 
       <Section title="1. ¿Qué son las Cookies?">
         <p className="text-justify">
-          Son pequeños archivos de texto que se guardan en tu dispositivo cuando visitas un sitio web. Funcionan como la "memoria" del sitio, permitiéndole recordarte en tu próxima visita.
+          Son pequeños archivos de texto que se guardan en tu dispositivo cuando visitas un sitio web. Funcionan como la &quot;memoria&quot; del sitio, permitiéndole recordarte en tu próxima visita.
         </p>
       </Section>
 

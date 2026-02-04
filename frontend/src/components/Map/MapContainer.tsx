@@ -9,7 +9,7 @@ import MapControls from './MapControls';
 // Dynamically import Map to avoid SSR issues with Leaflet
 const Map = dynamic(() => import('./Map'), { 
   ssr: false,
-  loading: () => <div className="h-full w-full bg-neutral-950 flex items-center justify-center font-mono text-orange-500 animate-pulse">/// CARGANDO_CARTOGRAFÍA...</div>
+  loading: () => <div className="h-full w-full bg-neutral-950 flex items-center justify-center font-mono text-orange-500 animate-pulse">{'///'} CARGANDO_CARTOGRAFÍA...</div>
 });
 
 export default function MapContainer() {
@@ -38,8 +38,8 @@ export default function MapContainer() {
     }
   }, [searchParams]);
 
-  if (isLoading) return <div className="h-screen w-full bg-neutral-950 flex items-center justify-center font-mono text-orange-500 animate-pulse">/// ACCEDIENDO_SATÉLITE...</div>;
-  if (isError) return <div className="h-screen w-full bg-neutral-950 flex items-center justify-center font-mono text-red-500">/// ERROR_DE_CONEXIÓN</div>;
+  if (isLoading) return <div className="h-screen w-full bg-neutral-950 flex items-center justify-center font-mono text-orange-500 animate-pulse">{'///'} ACCEDIENDO_SATÉLITE...</div>;
+  if (isError) return <div className="h-screen w-full bg-neutral-950 flex items-center justify-center font-mono text-red-500">{'///'} ERROR_DE_CONEXIÓN</div>;
 
   return (
     <div className="h-screen w-full relative bg-gray-100">

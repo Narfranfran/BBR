@@ -59,7 +59,7 @@ export default function Ranking() {
         borderColor: '#f97316',
         borderWidth: 0,
         borderRadius: 2,
-        barThickness: 'flex' as 'flex',
+        barThickness: 'flex' as const,
       },
     ],
   };
@@ -112,7 +112,7 @@ export default function Ranking() {
     );
   };
 
-  if (isLoading && bars.length === 0) return <div className="p-12 text-center font-mono text-orange-500 animate-pulse">/// CARGANDO_DATOS...</div>;
+  if (isLoading && bars.length === 0) return <div className="p-12 text-center font-mono text-orange-500 animate-pulse">{'///'} CARGANDO_DATOS...</div>;
 
   return (
     <div className="p-4 sm:p-8 max-w-7xl mx-auto">
@@ -121,7 +121,7 @@ export default function Ranking() {
             Ranking <span className="text-transparent bg-clip-text bg-linear-to-r from-orange-500 to-yellow-500">Top Tier</span>
         </h1>
         <p className="text-neutral-500 font-mono text-sm uppercase tracking-widest">
-            /// Los establecimientos mejor valorados por la comunidad
+            {'///'} Los establecimientos mejor valorados por la comunidad
         </p>
       </div>
 
@@ -167,7 +167,7 @@ export default function Ranking() {
 
                   <div className="mb-4">
                       <h3 className="font-bold text-xl text-white truncate mb-1 pr-6">{bar.attributes.name}</h3>
-                      <p className="text-xs font-mono text-neutral-500 uppercase">{bar.attributes.province} // {bar.attributes.municipality}</p>
+                      <p className="text-xs font-mono text-neutral-500 uppercase">{bar.attributes.province} {'//'} {bar.attributes.municipality}</p>
                   </div>
                   
                   <div className="flex items-center gap-2 border-t border-white/5 pt-4">
@@ -190,7 +190,7 @@ export default function Ranking() {
                                   ))}
                               </div>
                           </div>
-                          <p className="text-xs text-neutral-400 italic line-clamp-2">"{bar.attributes.top_review.comment}"</p>
+                          <p className="text-xs text-neutral-400 italic line-clamp-2">&quot;{bar.attributes.top_review.comment}&quot;</p>
                       </div>
                   )}
                   

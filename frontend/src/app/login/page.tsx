@@ -69,7 +69,7 @@ export default function Login() {
               LOGIN<span className="text-orange-500">.</span>
             </h1>
             <p className="text-neutral-500 font-mono text-xs uppercase tracking-widest">
-              /// Acceso a la red
+              {'///'} Acceso a la red
             </p>
           </div>
 
@@ -133,14 +133,14 @@ export default function Login() {
             {errors.length > 0 && (
               <div className="bg-red-500/10 border border-red-500/20 p-4 text-red-500 text-xs font-mono uppercase">
                 {errors.map((error, idx) => (
-                  <div key={idx}>/// ERROR: {error}</div>
+                  <div key={idx}>{'///'} ERROR: {error}</div>
                 ))}
               </div>
             )}
 
             {status && (
               <div className="bg-green-500/10 border border-green-500/20 p-4 text-green-500 text-xs font-mono uppercase">
-                /// STATUS: {status}
+                {'///'} STATUS: {status}
               </div>
             )}
 

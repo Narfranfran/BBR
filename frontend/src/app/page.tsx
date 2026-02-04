@@ -29,7 +29,7 @@ export default function LandingPage() {
               BBR<span className="text-orange-500">.</span>
             </h1>
             <p className="font-mono text-[10px] md:text-xs text-orange-500 mt-1 tracking-widest uppercase">
-              /// Plataforma_de_Descubrimiento
+              {'///'} Plataforma_de_Descubrimiento
             </p>
           </div>
           
@@ -73,7 +73,7 @@ export default function LandingPage() {
         {/* PROVINCES SCROLL */}
         <section className="border-b border-white/10 bg-neutral-900/30 backdrop-blur-sm">
           <div className="p-4 border-b border-white/10 flex justify-between items-center">
-             <h3 className="font-mono text-sm text-neutral-500 uppercase tracking-widest">/// Zonas_Activas</h3>
+             <h3 className="font-mono text-sm text-neutral-500 uppercase tracking-widest">{'///'} Zonas_Activas</h3>
              <div className="flex gap-2">
                 <span className="w-2 h-2 bg-neutral-700 rounded-full"></span>
                 <span className="w-2 h-2 bg-neutral-700 rounded-full"></span>
@@ -86,7 +86,7 @@ export default function LandingPage() {
                 href={`/map?province=${city}`} 
                 key={city}
                 className="
-                  flex-grow px-8 py-10 md:px-12 md:py-16 border-r border-white/10 
+                  grow px-8 py-10 md:px-12 md:py-16 border-r border-white/10 
                   text-xl md:text-3xl font-bold tracking-tight text-neutral-500 hover:text-white hover:bg-neutral-900 transition-colors
                   flex items-center justify-center text-center
                 "

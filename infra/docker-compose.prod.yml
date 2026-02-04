@@ -1,0 +1,76 @@
+version: "3.9"
+
+services:
+  # App Router (Internal Nginx)
+  app-nginx:
+    image: nginx:alpine
+    container_name: bbr-prod-nginx
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/prod.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app-frontend
+      - app-backend
+    networks:
+      - bbr-network
+
+  # Frontend (Next.js)
+  app-frontend:
+    build:
+      context: ../frontend
+      dockerfile: ../infra/docker/frontend/Dockerfile.prod
+    container_name: bbr-prod-frontend
+    restart: always
+    environment:
+      - NEXT_PUBLIC_API_URL=/api
+    networks:
+      - bbr-network
+
+  # Backend (Laravel)
+  app-backend:
+    build:
+      context: ../backend
+      dockerfile: ../infra/docker/backend/Dockerfile.prod
+    container_name: bbr-prod-backend
+    restart: always
+    environment:
+      - APP_ENV=production
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - DB_CONNECTION=mysql
+      - DB_HOST=app-db
+      - DB_PORT=3306
+      - DB_DATABASE=${DB_DATABASE:-bbr}
+      - DB_USERNAME=${DB_USERNAME:-bbr}
+      - DB_PASSWORD=${DB_PASSWORD:-secret}
+      - APP_KEY=${APP_KEY:-base64:Hz1+...} # Fallback for test or require .env
+    volumes:
+      # Mount storage for persistence if needed, or use a volume
+      - web_storage:/var/www/storage
+    networks:
+      - bbr-network
+
+  # Database (Optional - if not using external)
+  app-db:
+    image: mariadb:11
+    container_name: bbr-prod-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+      MYSQL_DATABASE: ${DB_DATABASE:-bbr}
+      MYSQL_USER: ${DB_USERNAME:-bbr}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
+    volumes:
+      - db_data_prod:/var/lib/mysql
+    networks:
+      - bbr-network
+
+networks:
+  bbr-network:
+    driver: bridge
+
+volumes:
+  db_data_prod:
+  web_storage:

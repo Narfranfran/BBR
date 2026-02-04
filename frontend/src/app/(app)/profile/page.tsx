@@ -16,7 +16,7 @@ export default function Profile() {
   const [editingReview, setEditingReview] = useState<string | null>(null);
   const [editForm, setEditForm] = useState({ rating: 0, comment: '' });
 
-  if (!user) return <div className="p-8 font-mono text-orange-500 animate-pulse">/// CARGANDO_DATOS_USUARIO...</div>;
+  if (!user) return <div className="p-8 font-mono text-orange-500 animate-pulse">{'///'} CARGANDO_DATOS_USUARIO...</div>;
 
   // Sorting Logic
   const getSortedReviews = () => {
@@ -149,7 +149,7 @@ export default function Profile() {
                 <span className="bg-orange-600 text-black text-[0.6rem] font-bold px-2 py-0.5 font-mono uppercase tracking-widest">
                     Citizen
                 </span>
-                <span className="text-neutral-500 font-mono text-xs">ID: {Math.random().toString(36).substr(2, 9).toUpperCase()}</span>
+                <span className="text-orange-500 font-mono text-xs">ID: {user.id ? `USR-${user.id.toString().padStart(6, '0')}` : 'UNKNOWN'}</span>
             </div>
             <h1 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter leading-none mb-1">
                 {user.name}
@@ -164,7 +164,7 @@ export default function Profile() {
         <div className="group">
             <div className="flex items-end justify-between mb-4 border-b border-white/10 pb-2">
                 <h2 className="text-xl font-bold text-white uppercase tracking-tight">
-                    <span className="text-orange-500 mr-2">///</span> 
+                    <span className="text-orange-500 mr-2">{'///'}</span> 
                     Historial de Reseñas
                 </h2>
                 
@@ -213,7 +213,7 @@ export default function Profile() {
                                 <div className="flex justify-between gap-4">
                                     <div className="flex-1 pr-4">
                                         <h3 className="text-white font-bold uppercase tracking-wide mb-2">{review.bar?.nombre || 'Local desconocido'}</h3>
-                                        <p className="text-neutral-400 text-sm font-mono leading-relaxed text-wrap">"{review.comment}"</p>
+                                        <p className="text-neutral-400 text-sm font-mono leading-relaxed text-wrap">&quot;{review.comment}&quot;</p>
                                         <div className="mt-2 text-[10px] text-neutral-600 font-mono uppercase">
                                             {review.created_at ? new Date(review.created_at).toLocaleDateString() : ''}
                                         </div>
@@ -258,7 +258,7 @@ export default function Profile() {
         <div className="group">
             <div className="flex items-end justify-between mb-4 border-b border-white/10 pb-2">
                 <h2 className="text-xl font-bold text-white uppercase tracking-tight">
-                    <span className="text-red-500 mr-2">///</span> 
+                    <span className="text-red-500 mr-2">{'///'}</span> 
                     Favoritos Guardados
                 </h2>
                 <span className="font-mono text-xs text-neutral-500">{user.favorites?.length || 0} RECORDS</span>
@@ -301,7 +301,7 @@ export default function Profile() {
         {/* Danger Zone */}
         <div className="mt-16 pt-8 border-t border-red-900/30">
             <h2 className="text-xl font-bold text-red-500 uppercase tracking-tight mb-4">
-                /// Zona de Peligro
+                {'///'} Zona de Peligro
             </h2>
             <div className="bg-red-950/10 border border-red-900/20 p-6 grid md:grid-cols-2 gap-6">
                 <div>

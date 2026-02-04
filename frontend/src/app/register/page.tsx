@@ -92,7 +92,7 @@ export default function Register() {
                 NUEVO PERFIL<span className="text-orange-500">.</span>
               </h1>
               <p className="text-neutral-500 font-mono text-xs uppercase tracking-widest">
-                /// Unirse a la comunidad
+                {'///'} Unirse a la comunidad
               </p>
             </div>
 
@@ -108,7 +108,7 @@ export default function Register() {
                   className={`block w-full bg-neutral-950 border ${errors.name ? 'border-red-500' : 'border-white/10'} text-white px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 placeholder-neutral-700 transition-colors font-mono text-sm`}
                   placeholder="username"
                 />
-                {errors.name && <p className="text-red-500 text-[0.65rem] font-mono mt-1 uppercase">/// {errors.name.message}</p>}
+                {errors.name && <p className="text-red-500 text-[0.65rem] font-mono mt-1 uppercase">{'///'} {errors.name.message}</p>}
               </div>
 
               {/* Email Field */}
@@ -121,7 +121,7 @@ export default function Register() {
                   className={`block w-full bg-neutral-950 border ${errors.email ? 'border-red-500' : 'border-white/10'} text-white px-4 py-3 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 placeholder-neutral-700 transition-colors font-mono text-sm`}
                   placeholder="user@example.com"
                 />
-                {errors.email && <p className="text-red-500 text-[0.65rem] font-mono mt-1 uppercase">/// {errors.email.message}</p>}
+                {errors.email && <p className="text-red-500 text-[0.65rem] font-mono mt-1 uppercase">{'///'} {errors.email.message}</p>}
               </div>
 
               {/* Password Fields Row */}
@@ -146,7 +146,7 @@ export default function Register() {
                         {showPassword ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
                       </button>
                     </div>
-                    {errors.password && <p className="text-red-500 text-[0.65rem] font-mono mt-1 uppercase">/// {errors.password.message}</p>}
+                    {errors.password && <p className="text-red-500 text-[0.65rem] font-mono mt-1 uppercase">{'///'} {errors.password.message}</p>}
                   </div>
                   <div>
                     <label htmlFor="password_confirmation" className="block text-xs font-mono text-neutral-400 uppercase mb-2">Confirmar</label>
@@ -167,7 +167,7 @@ export default function Register() {
                         {showConfirmPassword ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
                       </button>
                     </div>
-                    {errors.password_confirmation && <p className="text-red-500 text-[0.65rem] font-mono mt-1 uppercase">/// {errors.password_confirmation.message}</p>}
+                    {errors.password_confirmation && <p className="text-red-500 text-[0.65rem] font-mono mt-1 uppercase">{'///'} {errors.password_confirmation.message}</p>}
                   </div>
                 </div>
                 <PasswordStrength password={password} />
@@ -182,11 +182,11 @@ export default function Register() {
                   theme="dark"
                 />
               </div>
-              {errors.recaptcha_token && <p className="text-red-500 text-[0.65rem] font-mono mt-1 text-center uppercase">/// {errors.recaptcha_token.message}</p>}
+              {errors.recaptcha_token && <p className="text-red-500 text-[0.65rem] font-mono mt-1 text-center uppercase">{'///'} {errors.recaptcha_token.message}</p>}
 
               {serverErrors.length > 0 && (
                 <div className="bg-red-500/10 border border-red-500/20 p-4 text-red-500 text-xs font-mono uppercase">
-                  {serverErrors.map((error, idx) => <div key={idx}>/// ERROR: {error}</div>)}
+                  {serverErrors.map((error, idx) => <div key={idx}>{'///'} ERROR: {error}</div>)}
                 </div>
               )}
 

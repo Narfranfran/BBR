@@ -16,6 +16,7 @@ export default function MapControls({ filters, onFilterChange, totalResults }: M
 
     useEffect(() => {
         setLocalSearch(filters.search || '');
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filters.search]);
 
     const handleProvinceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
