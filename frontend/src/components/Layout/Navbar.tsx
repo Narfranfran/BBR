@@ -3,13 +3,30 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
-import { UserCircle, Terminal, Menu, X, LogOut } from 'lucide-react';
-import { useState } from 'react';
+import { UserCircle, Terminal, Menu, X, LogOut, User } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
 
 export default function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
     const pathname = usePathname();
     const { user, logout } = useAuth({ middleware: 'guest' });
     const [isUserMenuOpen, setUserMenuOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                setUserMenuOpen(false);
+            }
+        };
+
+        if (isUserMenuOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isUserMenuOpen]);
 
     // Industrial Breadcrumbs
     const getBreadcrumbs = () => {
@@ -32,7 +49,7 @@ export default function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
 
             <div className="flex items-center gap-4">
                 {user ? (
-                    <div className="relative flex items-center gap-3 pl-4 border-l border-white/10">
+                    <div ref={menuRef} className="relative flex items-center gap-3 pl-4 border-l border-white/10">
                         <div className="text-right hidden sm:block">
                             <span className="block text-xs text-orange-500 font-mono font-bold leading-none">USR_ID</span>
                             <span className="text-sm text-white font-medium">{user.name}</span>
@@ -42,6 +59,14 @@ export default function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
                         </button>
                         {isUserMenuOpen && (
                             <div className="absolute top-full right-0 mt-2 w-48 bg-neutral-900 border border-white/10 rounded-md shadow-lg py-1">
+                                <Link
+                                    href="/profile"
+                                    onClick={() => setUserMenuOpen(false)}
+                                    className="flex items-center px-4 py-2 text-sm text-neutral-400 hover:bg-white/5 hover:text-white w-full transition-colors group"
+                                >
+                                    <User className="w-4 h-4 mr-2 text-neutral-500 group-hover:text-white" />
+                                    Mi Perfil
+                                </Link>
                                 <button
                                     onClick={() => { logout(); setUserMenuOpen(false); }}
                                     className="flex items-center px-4 py-2 text-sm text-neutral-400 hover:bg-red-500/10 hover:text-red-500 w-full transition-colors group"

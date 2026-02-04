@@ -51,7 +51,13 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: { middleware?: 
             const text = await response.text();
             try {
                 const data = JSON.parse(text);
-                setErrors(Object.entries(data.errors || {}).flat());
+                if (data.errors) {
+                    setErrors(Object.entries(data.errors).flat());
+                } else if (data.message) {
+                    setErrors([data.message]);
+                } else {
+                     setErrors(['Error desconocido en el servidor']);
+                }
             } catch (e) {
                 console.error('JSON Parse Error:', e);
                 setErrors(['Error desconocido en el servidor (' + response.status + ')']);
@@ -100,7 +106,13 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: { middleware?: 
             console.error('Login Failed Body:', text);
             try {
                  const data = JSON.parse(text);
-                 setErrors(Object.entries(data.errors || {}).flat());
+                 if (data.errors) {
+                    setErrors(Object.entries(data.errors).flat());
+                 } else if (data.message) {
+                    setErrors([data.message]);
+                 } else {
+                    setErrors(['Error desconocido en el servidor']);
+                 }
             } catch (e) {
                  console.error('Error parsing login response:', e);
                  setErrors(['Error desconocido en el servidor']);

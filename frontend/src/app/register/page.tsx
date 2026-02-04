@@ -1,21 +1,26 @@
 'use client';
 
 import { useAuth } from '@/hooks/useAuth';
-import { useState, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { ChevronLeft, Info, Eye, EyeOff } from 'lucide-react';
 import Footer from '@/components/Layout/Footer';
+<<<<<<< HEAD
 import PasswordStrength from '@/components/PasswordStrength';
+=======
+import ReCAPTCHA from 'react-google-recaptcha';
+>>>>>>> 3b2143e63a0479b24fe3830a2d143672d79f1db4
 
 const registerSchema = z.object({
   name: z.string().min(1, 'IDENTIFIER_REQUIRED'),
   email: z.string().email('Formato de email inválido'),
   password: z.string().min(8, 'La contraseña debe tener al menos 8 caracteres.'),
   password_confirmation: z.string(),
-  captcha: z.string().min(1, 'CAPTCHA_REQUIRED'),
+  recaptcha_token: z.string().min(1, 'Por favor, completa el captcha'),
+
 }).refine((data) => data.password === data.password_confirmation, {
   message: "Las contraseñas no coinciden",
   path: ["password_confirmation"],
@@ -34,15 +39,20 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 export default function Register() {
   const { register: registerUser } = useAuth({ middleware: 'guest', redirectIfAuthenticated: '/map' });
   const [serverErrors, setServerErrors] = useState<string[]>([]);
-  const [captchaChallenge, setCaptchaChallenge] = useState({ num1: 0, num2: 0, result: 0 });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
+<<<<<<< HEAD
   const { register, handleSubmit, formState: { errors }, setError, watch } = useForm<RegisterFormData>({
+=======
+  const { register, handleSubmit, setValue, trigger, formState: { errors } } = useForm<RegisterFormData>({
+>>>>>>> 3b2143e63a0479b24fe3830a2d143672d79f1db4
     resolver: zodResolver(registerSchema),
     mode: 'onBlur'
   });
 
+<<<<<<< HEAD
   const password = watch('password');
 
   useEffect(() => {
@@ -53,21 +63,25 @@ export default function Register() {
     const num1 = Math.floor(Math.random() * 10) + 1;
     const num2 = Math.floor(Math.random() * 10) + 1;
     setCaptchaChallenge({ num1, num2, result: num1 + num2 });
+=======
+  const onReCAPTCHAChange = (token: string | null) => {
+    setValue('recaptcha_token', token || '');
+    trigger('recaptcha_token');
+>>>>>>> 3b2143e63a0479b24fe3830a2d143672d79f1db4
   };
 
   const submitForm = async (data: RegisterFormData) => {
-    if (parseInt(data.captcha) !== captchaChallenge.result) {
-      setError('captcha', { type: 'manual', message: 'Verificación fallida' });
-      generateCaptcha(); 
-      return;
-    }
-
     registerUser({
       name: data.name,
       email: data.email,
       password: data.password,
       password_confirmation: data.password_confirmation,
-      setErrors: setServerErrors,
+      recaptcha_token: data.recaptcha_token,
+      setErrors: (errors: string[]) => {
+        setServerErrors(errors);
+        recaptchaRef.current?.reset();
+        setValue('recaptcha_token', '');
+      },
     });
   };
 
@@ -170,24 +184,17 @@ export default function Register() {
                     <PasswordStrength password={password} />
                 </div>
 
-                {/* Captcha Challenge */}
-                <div className="bg-white/5 p-4 border border-white/10 mt-6">
-                    <div className="flex items-center gap-2 mb-3">
-                         <Info className="w-4 h-4 text-orange-500" />
-                         <span className="text-xs font-mono text-orange-500 uppercase">Verificación Humana</span>
-                    </div>
-                    <label htmlFor="captcha" className="block text-xs text-neutral-400 mb-2">
-                        Resuelve: <span className="text-white font-bold">{captchaChallenge.num1} + {captchaChallenge.num2}</span>
-                    </label>
-                    <input
-                        id="captcha"
-                        {...register('captcha')}
-                        type="number"
-                        className={`block w-full bg-neutral-950 border ${errors.captcha ? 'border-red-500' : 'border-white/10'} text-white px-4 py-2 focus:outline-none focus:border-orange-500 font-mono text-sm`}
-                        placeholder="Resultado"
+                {/* ReCAPTCHA */}
+                <div className="flex justify-center mt-6">
+                    <ReCAPTCHA
+                        ref={recaptchaRef}
+                        sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ''}
+                        onChange={onReCAPTCHAChange}
+                        theme="dark"
                     />
-                    {errors.captcha && <p className="text-red-500 text-[0.65rem] font-mono mt-1 uppercase">/// {errors.captcha.message}</p>}
                 </div>
+                 {errors.recaptcha_token && <p className="text-red-500 text-[0.65rem] font-mono mt-1 text-center uppercase">/// {errors.recaptcha_token.message}</p>}
+
 
                 {serverErrors.length > 0 && (
                     <div className="bg-red-500/10 border border-red-500/20 p-4 text-red-500 text-xs font-mono uppercase">
