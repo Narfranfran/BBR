@@ -1,10 +1,11 @@
 "use client";
 
 import { useAuth } from "@/hooks/useAuth";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import { ChevronLeft, Eye, EyeOff } from "lucide-react";
 import Footer from "@/components/Layout/Footer";
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default function Login() {
   const { login } = useAuth({
@@ -13,17 +14,33 @@ export default function Login() {
   });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [recaptchaToken, setRecaptchaToken] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
   const [status, setStatus] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+
+  const onReCAPTCHAChange = (token: string | null) => {
+    setRecaptchaToken(token || "");
+  };
 
   const submitForm = async (event: React.FormEvent) => {
     event.preventDefault();
 
+    if (!recaptchaToken) {
+        setErrors(["Por favor, completa el captcha"]);
+        return;
+    }
+
     login({
       email,
       password,
-      setErrors,
+      recaptcha_token: recaptchaToken,
+      setErrors: (errors: string[]) => {
+          setErrors(errors);
+          recaptchaRef.current?.reset();
+          setRecaptchaToken("");
+      },
       setStatus,
     });
   };
@@ -101,6 +118,16 @@ export default function Login() {
                     </Link>
                 </div>
               </div>
+            </div>
+
+            {/* ReCAPTCHA */}
+            <div className="flex justify-center mt-6">
+                <ReCAPTCHA
+                    ref={recaptchaRef}
+                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ''}
+                    onChange={onReCAPTCHAChange}
+                    theme="dark"
+                />
             </div>
 
             {errors.length > 0 && (

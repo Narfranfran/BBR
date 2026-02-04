@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Events\Registered;
 
+use App\Rules\Recaptcha;
+
 class AuthController extends Controller
 {
     public function register(Request $request)
@@ -18,6 +20,7 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|confirmed|min:8',
+            'recaptcha_token' => ['required', new Recaptcha],
         ]);
 
         $user = User::create([
@@ -37,15 +40,10 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        \Illuminate\Support\Facades\Log::info('Login Attempt Info', [
-            'email' => $request->email,
-            'cookies' => $request->cookies->all(),
-            'headers' => $request->headers->all()
-        ]);
-
         $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
+            'recaptcha_token' => ['required', new Recaptcha],
         ]);
 
         if (!Auth::attempt($request->only('email', 'password'))) {
