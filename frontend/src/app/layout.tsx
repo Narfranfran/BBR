@@ -19,6 +19,10 @@ export const metadata: Metadata = {
   },
   description: "Plataforma de Descubrimiento Social de Bares en CyL",
   manifest: "/manifest.json",
+  icons: {
+    icon: '/favicon.ico?v=2',
+    apple: '/favicon.ico?v=2',
+  },
   // SEO: og:type, og:title configured via Metadata
   openGraph: {
     title: 'BBr - BuscaBares',

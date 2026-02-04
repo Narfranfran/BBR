@@ -21,6 +21,13 @@ class Recaptcha implements ValidationRule
             'remoteip' => request()->ip(),
         ]);
 
+        \Illuminate\Support\Facades\Log::info("ReCAPTCHA Debug: ", [
+            'secret_exists' => !empty(env('RECAPTCHA_SECRET_KEY')),
+            'secret_prefix' => substr(env('RECAPTCHA_SECRET_KEY'), 0, 5) . '...',
+            'remote_ip' => request()->ip(),
+            'google_response' => $response->json(),
+        ]);
+
         if (!$response->json('success')) {
             $fail('La verificación reCAPTCHA falló. Por favor, inténtelo de nuevo.');
         }

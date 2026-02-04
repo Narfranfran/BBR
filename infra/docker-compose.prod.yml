@@ -21,8 +21,12 @@ services:
     build:
       context: ../frontend
       dockerfile: ../infra/docker/frontend/Dockerfile.prod
+      args:
+        NEXT_PUBLIC_API_URL: /api
+        NEXT_PUBLIC_RECAPTCHA_SITE_KEY: ${NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
     container_name: bbr-prod-frontend
     restart: always
+    env_file: ../.env
     environment:
       - NEXT_PUBLIC_API_URL=/api
     networks:
@@ -35,8 +39,8 @@ services:
       dockerfile: ../infra/docker/backend/Dockerfile.prod
     container_name: bbr-prod-backend
     restart: always
+    env_file: ../.env
     environment:
-      - APP_ENV=production
       - APP_ENV=production
       - APP_DEBUG=false
       - DB_CONNECTION=mysql
@@ -45,10 +49,51 @@ services:
       - DB_DATABASE=${DB_DATABASE:-bbr}
       - DB_USERNAME=${DB_USERNAME:-bbr}
       - DB_PASSWORD=${DB_PASSWORD:-secret}
-      - APP_KEY=${APP_KEY:-base64:Hz1+...} # Fallback for test or require .env
+      - MAIL_MAILER=smtp
+      - MAIL_HOST=mailpit
+      - MAIL_PORT=1025
+      - SANCTUM_STATEFUL_DOMAINS=localhost:8080,localhost:3000,127.0.0.1,127.0.0.1:8080
+      - SESSION_DOMAIN=localhost
     volumes:
       # Mount storage for persistence if needed, or use a volume
       - web_storage:/var/www/storage
+    networks:
+      - bbr-network
+
+  # Scheduler (Cron Jobs)
+  app-scheduler:
+    build:
+      context: ../backend
+      dockerfile: ../infra/docker/backend/Dockerfile.prod
+    container_name: bbr-prod-scheduler
+    restart: always
+    env_file: ../.env
+    environment:
+      - APP_ENV=production
+      - DB_CONNECTION=mysql
+      - DB_HOST=app-db
+      - DB_PORT=3306
+      - DB_DATABASE=${DB_DATABASE:-bbr}
+      - DB_USERNAME=${DB_USERNAME:-bbr}
+      - DB_PASSWORD=${DB_PASSWORD:-secret}
+      - MAIL_MAILER=smtp
+      - MAIL_HOST=mailpit
+      - MAIL_PORT=1025
+    command: php artisan schedule:work
+    networks:
+      - bbr-network
+    depends_on:
+      - app-backend
+      - app-db
+
+  # Mailpit (Email Catcher)
+  mailpit:
+    image: axllent/mailpit
+    container_name: bbr-prod-mailpit
+    restart: always
+    ports:
+      - "8026:8025" # Web UI (Changed to 8026 to avoid conflicts)
+      - "1025:1025" # SMTP
     networks:
       - bbr-network
 

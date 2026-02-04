@@ -102,10 +102,32 @@ El proyecto sigue una arquitectura **Monorepo** (Backend API + Frontend SPA).
     php artisan app:sync-bars
     ```
 
-### 🐳 Docker
+### 🐳 Docker (Producción)
 
-> [!NOTE]
-> **TO-DO**: La configuración completa de Docker (`docker-compose.yml`) para producción está actualmente en desarrollo. Se recomienda utilizar la instalación local para desarrollo.
+El proyecto incluye una configuración optimizada para producción con **Nginx, PHP-FPM, Next.js Standalone, Mailpit y Scheduler**.
+
+1.  **Configurar Entorno**:
+    Crea un archivo `.env` en la raíz del proyecto (basado en `.env.example`) y configura tus claves:
+
+    ```bash
+    cp .env.example .env
+    # IMPORTANTE: Rellenar APP_KEY, RECAPTCHA_SECRET_KEY y credenciales de BD.
+    ```
+
+2.  **Desplegar**:
+
+    ```bash
+    docker compose --env-file .env -f infra/docker-compose.prod.yml up -d --build
+    ```
+
+3.  **Servicios**:
+    - **Web**: `http://localhost:8080` (o tu dominio)
+    - **API**: `http://localhost:8080/api`
+    - **Emails (Mailpit)**: `http://localhost:8026`
+    - **Scheduler**: Ejecuta la sincronización de datos diariamente a las 03:00.
+
+> [!TIP]
+> Para más detalles sobre el despliegue en servidor (Proxmox/VPS), consulta [deployment_guide.md](./deployment_guide.md).
 
 ---
 

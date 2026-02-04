@@ -7,7 +7,7 @@ import ReviewCard from './ReviewCard';
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function ReviewsCarousel() {
-  const { data, error } = useSWR('http://localhost:8000/api/reviews/random', fetcher);
+  const { data, error } = useSWR('/api/reviews/random', fetcher);
   /* eslint-disable react-hooks/exhaustive-deps */
   const reviews = useMemo(() => {
     if (data && data.status === 'success') {
