@@ -38,7 +38,7 @@ export default function MapControls({ filters, onFilterChange, totalResults }: M
     };
 
     return (
-        <div className="absolute top-4 left-4 z-[1000] flex flex-col gap-4 w-full max-w-sm pointer-events-auto">
+        <div className="absolute top-4 left-4 z-30 flex flex-col gap-4 w-full max-w-sm pointer-events-auto">
             {/* Status Panel - Industrial Style */}
             <div className="bg-neutral-950/90 border border-white/10 backdrop-blur-md p-4 shadow-xl">
                 <div className="flex justify-between items-center mb-2">
